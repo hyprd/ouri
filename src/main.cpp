@@ -7,5 +7,8 @@ int main(int argc, char *argv[]) {
     MMU* mmu = new MMU;
     CPU* cpu = new CPU(mmu);
     mmu->LoadROM(mmu, Filename);
+    for(;;) {
+        cpu->Cycle();
+    }
     return 0;
 }

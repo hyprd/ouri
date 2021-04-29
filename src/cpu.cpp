@@ -1,6 +1,7 @@
 #include "cpu.h"
 
 Register::Register(){}
+
 Register::Register(uint8_t *hi, uint8_t *lo){ 
     high = hi; 
     low = lo;
@@ -15,7 +16,8 @@ void Register::SetRegister(uint16_t value) {
     *high = value >> 8;
 }
 
-CPU::CPU(MMU* mmu) {
+CPU::CPU(MMU* _mmu) {
+    mmu = _mmu;
     A = B = C = D = E = F = H = L = 0x00;
     SP = PC = 0x0000;
     AF = Register(&A, &F);
@@ -30,4 +32,13 @@ void CPU::Initialise() {
     std::cout << "[INFO] Initialising CPU..." << std::endl;
     PC = 0x0100;
     SP = 0xFFFE;
+}
+
+void CPU::Cycle() {
+    Execute(mmu->ReadMemory(PC));
+    PC++;
+}
+
+void CPU::Execute(uint8_t Instruction) {
+    if(Instruction != 0) std::cout << "Instruction: " << std::hex << std::uppercase << +Instruction << "\tPC: " << PC << std::endl;
 }

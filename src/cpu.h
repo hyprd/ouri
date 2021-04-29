@@ -18,9 +18,13 @@ class CPU {
         uint16_t SP;
         uint16_t PC;
 
+        MMU* mmu;
+
         CPU(MMU* mmu);
         Register AF, BC, DE, HL;
 
         void Initialise();
+        void Cycle();
+        void Execute(uint8_t Instruction);
 };
 
