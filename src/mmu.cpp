@@ -2,8 +2,8 @@
 
 MMU::MMU(){}
 
-void MMU::LoadROM(MMU* mmu, char *filename) {
-    FILE* f = fopen(filename, "rb");
+void MMU::LoadROM(MMU* mmu, char *Filename) {
+    FILE* f = fopen(Filename, "rb");
     fseek(f, 0, SEEK_END);
     SizeROM = ftell(f);
     rewind(f);

@@ -3,9 +3,9 @@
 #include "cpu.h"
 
 int main(int argc, char *argv[]) {
-    char *filename = argv[1];
+    char *Filename = argv[1];
     MMU* mmu = new MMU;
-    CPU* cpu = new CPU;
-    mmu->LoadROM(mmu, filename);
+    CPU* cpu = new CPU(mmu);
+    mmu->LoadROM(mmu, Filename);
     return 0;
 }
