@@ -2,11 +2,11 @@
 
 MMU::MMU(){}
 
-void MMU::ROM_LOAD(MMU* mmu, char *filename) {
+void MMU::LoadROM(MMU* mmu, char *filename) {
     FILE* f = fopen(filename, "rb");
     fseek(f, 0, SEEK_END);
-    ROM_SIZE = ftell(f);
+    SizeROM = ftell(f);
     rewind(f);
-    fread(mmu->MEMORY, 1, ROM_SIZE, f);
+    fread(mmu->Memory, 1, SizeROM, f);
     fclose(f);
 }

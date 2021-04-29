@@ -4,8 +4,8 @@
 class MMU {
     public:
         MMU();
-        uint8_t MEMORY[GB_MEMORY_MAX];
-        uint32_t ROM_SIZE = 0;
+        uint8_t Memory[GB_MEMORY_MAX];
+        uint32_t SizeROM = 0;
 
-        void ROM_LOAD(MMU* mmu, char *filename);
+        void LoadROM(MMU* mmu, char *filename);
 };

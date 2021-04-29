@@ -4,4 +4,6 @@
 class CPU {
     public:
         CPU();
+
+        
 };
