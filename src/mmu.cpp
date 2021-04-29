@@ -1,5 +1,7 @@
 #include "mmu.h"
 
+MMU::MMU(){}
+
 void MMU::ROM_LOAD(MMU* mmu, char *filename) {
     FILE* f = fopen(filename, "rb");
     fseek(f, 0, SEEK_END);

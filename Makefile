@@ -1,2 +1,9 @@
+SRC = src
+OUTPUT = ouri
+PARAMS = -g -O2
+
 all:
-	g++ src/main.cpp src/mmu.cpp -o ouri
+	g++ $(PARAMS) $(wildcard $(SRC)/*.cpp) -o $(OUTPUT)
+
+clean:
+	rm ouri.exe
