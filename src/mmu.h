@@ -8,5 +8,7 @@ class MMU {
         uint32_t SizeROM = 0;
 
         void LoadROM(MMU* mmu, char *Filename);
+        
         uint16_t ReadMemory(uint16_t Address);
+        void SetMemory(uint16_t Address, uint8_t Value);
 };

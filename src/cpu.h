@@ -34,5 +34,9 @@ class CPU {
     
     private:
         void Opcode0x00();
+
+        void LD(uint8_t &Reg1, uint8_t Reg2);
+        void LD(uint16_t Address, uint8_t Reg);
+        void LD(uint8_t &Reg1, uint16_t Address);
 };
 
