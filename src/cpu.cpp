@@ -43,6 +43,6 @@ void CPU::Cycle() {
 }
 
 void CPU::Execute(uint8_t Instruction) {
-    //if(Instruction != 0) std::cout << "Instruction: " << std::hex << std::uppercase << +Instruction << "\tPC: " << PC << std::endl;
+    // std::cout << "Instruction: " << std::hex << std::uppercase << +Instruction << "\tPC: " << PC << std::endl;
     (this->*Opcodes[Instruction])();
 }
