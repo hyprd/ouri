@@ -1,4 +1,5 @@
 #include "cpu.h"
+#include "opcodes.h"
 
 Register::Register(){}
 
@@ -26,12 +27,14 @@ CPU::CPU(MMU* _mmu) {
     HL = Register(&H, &L);
 
     Initialise();
+    PopulateOpcodes();
 } 
 
 void CPU::Initialise() {
     std::cout << "[INFO] Initialising CPU..." << std::endl;
     PC = 0x0100;
     SP = 0xFFFE;
+    std::cout << "[INFO] Done." << std::endl;
 }
 
 void CPU::Cycle() {
@@ -40,5 +43,6 @@ void CPU::Cycle() {
 }
 
 void CPU::Execute(uint8_t Instruction) {
-    if(Instruction != 0) std::cout << "Instruction: " << std::hex << std::uppercase << +Instruction << "\tPC: " << PC << std::endl;
+    //if(Instruction != 0) std::cout << "Instruction: " << std::hex << std::uppercase << +Instruction << "\tPC: " << PC << std::endl;
+    (this->*Opcodes[Instruction])();
 }

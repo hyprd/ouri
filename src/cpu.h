@@ -14,6 +14,7 @@ class Register {
 
 class CPU {
     public:
+
         uint8_t A, B, C, D, E, F, H, L;
         uint16_t SP;
         uint16_t PC;
@@ -26,5 +27,12 @@ class CPU {
         void Initialise();
         void Cycle();
         void Execute(uint8_t Instruction);
+
+        typedef void (CPU::*Opcode)(void);
+        Opcode Opcodes[0x100];
+        void PopulateOpcodes();
+    
+    private:
+        void Opcode0x00();
 };
 
