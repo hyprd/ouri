@@ -98,6 +98,56 @@ void CPU::PopulateOpcodes() {
 
 }
 
+/* --------------------------------------------------------------------*/
+/* ------------------------------   BITS  -----------------------------*/
+/* --------------------------------------------------------------------*/
+void CPU::SetBit(uint8_t &Byte, uint8_t Bit) { 
+  Byte |= 1UL << Bit; 
+}
+
+void CPU::ClearBit(uint8_t &Byte, uint8_t Bit) { 
+  Byte &= ~(1UL << Bit); 
+}
+
+void CPU::ToggleBit(uint8_t &Byte, uint8_t Bit) { 
+  Byte ^= 1UL << Bit; 
+}
+
+uint8_t CPU::GetBit(uint8_t Byte, uint8_t Bit) {
+  return !!(Byte >> Bit);
+}
+
+/* --------------------------------------------------------------------*/
+/* ----------------------------  FUNCTIONS  ---------------------------*/
+/* --------------------------------------------------------------------*/
+
+void CPU::LD(uint8_t &Reg1, uint8_t Reg2) {
+  Reg1 = Reg2;
+}
+
+void CPU::LD(uint16_t Address, uint8_t Reg) {
+  mmu -> SetMemory(Address, Reg);
+}
+
+void CPU::LD(uint8_t &Reg1, uint16_t Address) {
+  Reg1 = mmu -> ReadMemory(Address);
+}
+
+void CPU::ADD(uint8_t Reg2) {
+
+}
+
+void CPU::ADD_HL(Register Reg2) {
+
+}
+
+void CPU::ADD_SP() {
+
+}
+
+/* --------------------------------------------------------------------*/
+/* ------------------------------ OPCODES -----------------------------*/
+/* --------------------------------------------------------------------*/
 void CPU::Opcode0x00() {
   std::cout << "NOP" << std::endl;
 }
@@ -494,16 +544,4 @@ void CPU::Opcode0xFA() {
   uint8_t Low = mmu -> ReadMemory(PC);
   PC++;
   LD(A, mmu -> ReadMemory(FormWord(High, Low)));
-}
-
-void CPU::LD(uint8_t & Reg1, uint8_t Reg2) {
-  Reg1 = Reg2;
-}
-
-void CPU::LD(uint16_t Address, uint8_t Reg) {
-  mmu -> SetMemory(Address, Reg);
-}
-
-void CPU::LD(uint8_t & Reg1, uint16_t Address) {
-  Reg1 = mmu -> ReadMemory(Address);
 }

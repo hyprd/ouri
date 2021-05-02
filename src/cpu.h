@@ -33,9 +33,17 @@ class CPU {
         void PopulateOpcodes();
     
     private:
+        void SetBit(uint8_t &Byte, uint8_t Bit);
+        void ClearBit(uint8_t &Byte, uint8_t Bit);
+        void ToggleBit(uint8_t &Byte, uint8_t Bit);
+        uint8_t GetBit(uint8_t Byte, uint8_t Bit);
+
         void LD(uint8_t &Reg1, uint8_t Reg2);
         void LD(uint16_t Address, uint8_t Reg);
         void LD(uint8_t &Reg1, uint16_t Address);
+        void ADD(uint8_t Reg2);
+        void ADD_HL(Register Reg2);
+        void ADD_SP();
 
         void Opcode0x00();
         void Opcode0x01();
