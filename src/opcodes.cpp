@@ -1,5 +1,4 @@
 #include "opcodes.h"
-
 #include "helpers.h"
 
 void CPU::PopulateOpcodes() {
@@ -89,6 +88,18 @@ void CPU::PopulateOpcodes() {
   Opcodes[0x7D] = &CPU::Opcode0x7D;
   Opcodes[0x7E] = &CPU::Opcode0x7E;
   Opcodes[0x7F] = &CPU::Opcode0x7F;
+  
+  Opcodes[0x80] = &CPU::Opcode0x80;
+  Opcodes[0x81] = &CPU::Opcode0x81;
+  Opcodes[0x82] = &CPU::Opcode0x82;
+  Opcodes[0x83] = &CPU::Opcode0x83;
+  Opcodes[0x84] = &CPU::Opcode0x84;
+  Opcodes[0x85] = &CPU::Opcode0x85;
+  Opcodes[0x86] = &CPU::Opcode0x86;
+  Opcodes[0x87] = &CPU::Opcode0x87;
+  Opcodes[0x88] = &CPU::Opcode0x88;
+  Opcodes[0x89] = &CPU::Opcode0x89;
+  
   Opcodes[0xE0] = &CPU::Opcode0xE0;
   Opcodes[0xE2] = &CPU::Opcode0xE2;
   Opcodes[0xEA] = &CPU::Opcode0xEA;
@@ -126,23 +137,38 @@ void CPU::LD(uint8_t &Reg1, uint8_t Reg2) {
 }
 
 void CPU::LD(uint16_t Address, uint8_t Reg) {
-  mmu -> SetMemory(Address, Reg);
+  mmu->SetMemory(Address, Reg);
 }
 
 void CPU::LD(uint8_t &Reg1, uint16_t Address) {
-  Reg1 = mmu -> ReadMemory(Address);
+  Reg1 = mmu->ReadMemory(Address);
 }
 
 void CPU::ADD(uint8_t Reg2) {
-
+  uint8_t Evaluation = static_cast<uint8_t>(A + Reg2);
+  if(Evaluation == 0) SetBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+  if((A & 0x0F) + (Reg2 & 0x0F) > 0x0F) SetBit(F, FLAG_H);
+  if(Evaluation > 0xFF) SetBit(F, FLAG_C);
+  A = Evaluation;
 }
 
-void CPU::ADD_HL(Register Reg2) {
-
+void CPU::ADD_HL(uint16_t Reg2) {
+  ClearBit(F, FLAG_N);
+  uint16_t Evaluation = static_cast<uint16_t>((HL.GetRegister() + Reg2) & 0x0FFF);
+  (Evaluation > 0x0FFF) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H); 
+  (HL.GetRegister() + Reg2) > 0xFFFF ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
+  HL.SetRegister(Evaluation);
 }
 
 void CPU::ADD_SP() {
-
+  int8_t imm = mmu->ReadMemory(PC);
+  PC++;
+  ClearBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+  ((SP & 0x0FFF) + imm) > 0x0FFF ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  (SP + imm) > 0xFFFF ? SetBit(F, FLAG_C) : SetBit(F, FLAG_C);
+  SP += imm;
 }
 
 /* --------------------------------------------------------------------*/
@@ -177,6 +203,10 @@ void CPU::Opcode0x08() {
     LD(mmu->ReadMemory(FormWord(High, Low)), SP);
 }
 
+void CPU::Opcode0x09() {
+  ADD_HL(BC.GetRegister());
+}
+
 void CPU::Opcode0x11() {
     uint8_t High = mmu->ReadMemory(PC);
     PC++;
@@ -199,6 +229,10 @@ void CPU::Opcode0x12() {
 
 void CPU::Opcode0x16() {
   LD(D, mmu -> ReadMemory(PC++));
+}
+
+void CPU::Opcode0x19() {
+  ADD_HL(DE.GetRegister());
 }
 
 void CPU::Opcode0x1A() {
@@ -226,6 +260,10 @@ void CPU::Opcode0x26() {
   LD(H, mmu -> ReadMemory(PC++));
 }
 
+void CPU::Opcode0x29() {
+  ADD_HL(HL.GetRegister());
+}
+
 void CPU::Opcode0x2A() {
   LD(A, HL.GetRegister());
   HL.SetRegister(HL.GetRegister() + 1);
@@ -250,6 +288,10 @@ void CPU::Opcode0x32() {
 
 void CPU::Opcode0x36() {
   LD(HL.GetRegister(), mmu -> ReadMemory(PC++));
+}
+
+void CPU::Opcode0x39() {
+  ADD_HL(SP);
 }
 
 void CPU::Opcode0x3A() {
@@ -515,6 +557,71 @@ void CPU::Opcode0x7E() {
 
 void CPU::Opcode0x7F() {
   LD(A, A);
+}
+
+void CPU::Opcode0x80() {
+  ADD(B);
+}
+
+void CPU::Opcode0x81() {
+  ADD(C);
+}
+
+void CPU::Opcode0x82() {
+  ADD(D);
+}
+
+void CPU::Opcode0x83() {
+  ADD(E);
+}
+
+void CPU::Opcode0x84() {
+  ADD(H);
+}
+
+void CPU::Opcode0x85() {
+  ADD(L);
+}
+
+void CPU::Opcode0x86() {
+  ADD(mmu->ReadMemory(PC));
+  PC++;
+}
+
+void CPU::Opcode0x87() {
+  ADD(A);
+}
+
+void CPU::Opcode0x88() {
+  //ADC A, B
+}
+
+void CPU::Opcode0x89() {
+  //ADC 
+}
+
+void CPU::Opcode0x8A() {
+  //ADC 
+}
+
+void CPU::Opcode0x8B() {
+  //ADC 
+}
+
+void CPU::Opcode0x8C() {
+  //ADC 
+}
+
+void CPU::Opcode0x8D() {
+  //ADC 
+}
+
+void CPU::Opcode0x8E() {
+  //ADC 
+}
+
+void CPU::Opcode0x8F() {
+  //ADC 
 }
 
 void CPU::Opcode0xE0() {
