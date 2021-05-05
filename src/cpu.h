@@ -44,6 +44,9 @@ class CPU {
         void ADD(uint8_t Reg2);
         void ADD_HL(uint16_t Reg2);
         void ADD_SP();
+        void ADC(uint8_t Reg2);
+        void SUB(uint8_t Reg2);
+        void SBC(uint8_t Reg2);
 
         void Opcode0x00();
         void Opcode0x01();

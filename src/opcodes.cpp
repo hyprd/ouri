@@ -171,6 +171,35 @@ void CPU::ADD_SP() {
   SP += imm;
 }
 
+void CPU::ADC(uint8_t Reg2) {
+  uint8_t Carry = GetBit(F, FLAG_C);
+  ClearBit(F, FLAG_N);
+  uint8_t Evaluation = static_cast<uint8_t>(A + Reg2 + Carry);
+  Evaluation == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z); 
+  (A + Reg2) & 0x0F + Carry > 0x0F ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  Evaluation > 0xFF ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
+  A = Evaluation;
+}
+
+void CPU::SUB(uint8_t Reg2) {
+  uint8_t Evaluation = static_cast<uint8_t>(A - Reg2);
+  if(Evaluation == 0) SetBit(F, FLAG_Z);
+  SetBit(F, FLAG_N);
+  (A & 0x0F) > (Reg2 & 0x0F) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  if(Evaluation < 0x00) SetBit(F, FLAG_C);
+  A = Evaluation;
+}
+
+void CPU::SBC(uint8_t Reg2) {
+  uint8_t Carry = GetBit(F, FLAG_C);
+  uint8_t Evaluation = static_cast<uint8_t>(A - (Reg2 + Carry));
+  SetBit(F, FLAG_N);
+  (Reg2 & 0x0F + Carry > A & 0x0F) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  Evaluation < 0 ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
+  A = Evaluation;
+}
+
+
 /* --------------------------------------------------------------------*/
 /* ------------------------------ OPCODES -----------------------------*/
 /* --------------------------------------------------------------------*/
