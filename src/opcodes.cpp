@@ -199,6 +199,63 @@ void CPU::SBC(uint8_t Reg2) {
   A = Evaluation;
 }
 
+void CPU::AND(uint8_t Reg2) {
+  A &= Reg2;
+  A == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+  SetBit(F, FLAG_H);
+  ClearBit(F, FLAG_C);
+}
+
+void CPU::XOR(uint8_t Reg2) {
+  A ^= Reg2;
+  A == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+  ClearBit(F, FLAG_H);
+  ClearBit(F, FLAG_C);
+}
+
+void CPU::OR(uint8_t Reg2) {
+  A |= Reg2;
+  A == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+  ClearBit(F, FLAG_H);
+  ClearBit(F, FLAG_C);
+}
+
+void CPU::INC(uint8_t &Reg) {
+  Reg & 0xF == 0xF ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  Reg += 1;
+  Reg == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+}
+
+void CPU::INC(Register Reg) {
+  uint16_t Address = Reg.GetRegister();
+  Reg.SetRegister(Address + 1);
+}
+
+void CPU::INC_SP() {
+  SP += 1;
+}
+
+void CPU::DEC(uint8_t &Reg) {
+  Reg & 0xF == 0 ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  Reg -= 1;
+  Reg == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+}
+
+void CPU::DEC(Register Reg) {
+  uint16_t Address = Reg.GetRegister();
+  Reg.SetRegister(Address - 1);
+}
+
+void CPU::DEC_SP() {
+  SP -= 1;
+}
+
+
 
 /* --------------------------------------------------------------------*/
 /* ------------------------------ OPCODES -----------------------------*/

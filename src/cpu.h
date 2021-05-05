@@ -47,6 +47,15 @@ class CPU {
         void ADC(uint8_t Reg2);
         void SUB(uint8_t Reg2);
         void SBC(uint8_t Reg2);
+        void AND(uint8_t Reg2);
+        void XOR(uint8_t Reg2);
+        void OR(uint8_t Reg2);
+        void INC(uint8_t &Reg);
+        void INC(Register Reg);
+        void INC_SP();
+        void DEC(uint8_t &Reg);
+        void DEC(Register Reg);
+        void DEC_SP();
 
         void Opcode0x00();
         void Opcode0x01();
