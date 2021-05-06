@@ -1,5 +1,4 @@
 #pragma once
-#include "definitions.h"
 #include "mmu.h"
 
 class Register {
@@ -14,6 +13,10 @@ class Register {
 
 class CPU {
     public:
+    uint8_t FLAG_Z = 7;
+    uint8_t FLAG_N = 6;
+    uint8_t FLAG_H = 5;
+    uint8_t FLAG_C = 4;
 
         uint8_t A, B, C, D, E, F, H, L;
         uint16_t SP;
@@ -33,29 +36,32 @@ class CPU {
         void PopulateOpcodes();
     
     private:
-        void SetBit(uint8_t &Byte, uint8_t Bit);
-        void ClearBit(uint8_t &Byte, uint8_t Bit);
-        void ToggleBit(uint8_t &Byte, uint8_t Bit);
-        uint8_t GetBit(uint8_t Byte, uint8_t Bit);
+        void SetBit(uint8_t &byte, uint8_t bit);
+        void ClearBit(uint8_t &byte, uint8_t bit);
+        void ToggleBit(uint8_t &byte, uint8_t bit);
+        uint8_t GetBit(uint8_t byte, uint8_t bit);
 
-        void LD(uint8_t &Reg1, uint8_t Reg2);
-        void LD(uint16_t Address, uint8_t Reg);
-        void LD(uint8_t &Reg1, uint16_t Address);
-        void ADD(uint8_t Reg2);
-        void ADD_HL(uint16_t Reg2);
+        uint16_t READ_STACK();
+
+        void LD(uint8_t &reg1, uint8_t reg2);
+        void LD(uint16_t address, uint8_t reg);
+        void LD(uint8_t &reg1, uint16_t address);
+        void ADD(uint8_t reg2);
+        void ADD_HL(uint16_t reg2);
         void ADD_SP();
-        void ADC(uint8_t Reg2);
-        void SUB(uint8_t Reg2);
-        void SBC(uint8_t Reg2);
-        void AND(uint8_t Reg2);
-        void XOR(uint8_t Reg2);
-        void OR(uint8_t Reg2);
-        void INC(uint8_t &Reg);
-        void INC(Register Reg);
+        void ADC(uint8_t reg2);
+        void SUB(uint8_t reg2);
+        void SBC(uint8_t reg2);
+        void AND(uint8_t reg2);
+        void XOR(uint8_t reg2);
+        void OR(uint8_t reg2);
+        void INC(uint8_t &reg);
+        void INC(Register reg);
         void INC_SP();
-        void DEC(uint8_t &Reg);
-        void DEC(Register Reg);
+        void DEC(uint8_t &reg);
+        void DEC(Register reg);
         void DEC_SP();
+        void RET();
 
         void Opcode0x00();
         void Opcode0x01();

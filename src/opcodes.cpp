@@ -112,53 +112,61 @@ void CPU::PopulateOpcodes() {
 /* --------------------------------------------------------------------*/
 /* ------------------------------   BITS  -----------------------------*/
 /* --------------------------------------------------------------------*/
-void CPU::SetBit(uint8_t &Byte, uint8_t Bit) { 
-  Byte |= 1UL << Bit; 
+void CPU::SetBit(uint8_t &byte, uint8_t bit) { 
+  byte |= 1UL << bit; 
 }
 
-void CPU::ClearBit(uint8_t &Byte, uint8_t Bit) { 
-  Byte &= ~(1UL << Bit); 
+void CPU::ClearBit(uint8_t &byte, uint8_t bit) { 
+  byte &= ~(1UL << bit); 
 }
 
-void CPU::ToggleBit(uint8_t &Byte, uint8_t Bit) { 
-  Byte ^= 1UL << Bit; 
+void CPU::ToggleBit(uint8_t &byte, uint8_t bit) { 
+  byte ^= 1UL << bit; 
 }
 
-uint8_t CPU::GetBit(uint8_t Byte, uint8_t Bit) {
-  return !!(Byte >> Bit);
+uint8_t CPU::GetBit(uint8_t byte, uint8_t bit) {
+  return !!(byte >> bit);
 }
 
 /* --------------------------------------------------------------------*/
 /* ----------------------------  FUNCTIONS  ---------------------------*/
 /* --------------------------------------------------------------------*/
 
-void CPU::LD(uint8_t &Reg1, uint8_t Reg2) {
-  Reg1 = Reg2;
+uint16_t CPU::READ_STACK() {
+  uint16_t Low = mmu->ReadMemory(SP);
+  SP++;
+  uint16_t High = mmu->ReadMemory(SP);
+  SP++;
+  return FormWord(High, Low);
 }
 
-void CPU::LD(uint16_t Address, uint8_t Reg) {
-  mmu->SetMemory(Address, Reg);
+void CPU::LD(uint8_t &reg1, uint8_t reg2) {
+  reg1 = reg2;
 }
 
-void CPU::LD(uint8_t &Reg1, uint16_t Address) {
-  Reg1 = mmu->ReadMemory(Address);
+void CPU::LD(uint16_t address, uint8_t reg) {
+  mmu->SetMemory(address, reg);
 }
 
-void CPU::ADD(uint8_t Reg2) {
-  uint8_t Evaluation = static_cast<uint8_t>(A + Reg2);
-  if(Evaluation == 0) SetBit(F, FLAG_Z);
+void CPU::LD(uint8_t &reg1, uint16_t address) {
+  reg1 = mmu->ReadMemory(address);
+}
+
+void CPU::ADD(uint8_t reg2) {
+  uint8_t evaluation = static_cast<uint8_t>(A + reg2);
+  if(evaluation == 0) SetBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
-  if((A & 0x0F) + (Reg2 & 0x0F) > 0x0F) SetBit(F, FLAG_H);
-  if(Evaluation > 0xFF) SetBit(F, FLAG_C);
-  A = Evaluation;
+  if((A & 0x0F) + (reg2 & 0x0F) > 0x0F) SetBit(F, FLAG_H);
+  if(evaluation > 0xFF) SetBit(F, FLAG_C);
+  A = evaluation;
 }
 
-void CPU::ADD_HL(uint16_t Reg2) {
+void CPU::ADD_HL(uint16_t reg2) {
   ClearBit(F, FLAG_N);
-  uint16_t Evaluation = static_cast<uint16_t>((HL.GetRegister() + Reg2) & 0x0FFF);
-  (Evaluation > 0x0FFF) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H); 
-  (HL.GetRegister() + Reg2) > 0xFFFF ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
-  HL.SetRegister(Evaluation);
+  uint16_t evaluation = static_cast<uint16_t>((HL.GetRegister() + reg2) & 0x0FFF);
+  (evaluation > 0x0FFF) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H); 
+  (HL.GetRegister() + reg2) > 0xFFFF ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
+  HL.SetRegister(evaluation);
 }
 
 void CPU::ADD_SP() {
@@ -171,88 +179,93 @@ void CPU::ADD_SP() {
   SP += imm;
 }
 
-void CPU::ADC(uint8_t Reg2) {
-  uint8_t Carry = GetBit(F, FLAG_C);
+void CPU::ADC(uint8_t reg2) {
+  uint8_t carry = GetBit(F, FLAG_C);
   ClearBit(F, FLAG_N);
-  uint8_t Evaluation = static_cast<uint8_t>(A + Reg2 + Carry);
-  Evaluation == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z); 
-  (A + Reg2) & 0x0F + Carry > 0x0F ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
-  Evaluation > 0xFF ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
-  A = Evaluation;
+  uint8_t evaluation = static_cast<uint8_t>(A + reg2 + carry);
+  evaluation == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z); 
+  (A + reg2) & 0x0F + carry > 0x0F ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  evaluation > 0xFF ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
+  A = evaluation;
 }
 
-void CPU::SUB(uint8_t Reg2) {
-  uint8_t Evaluation = static_cast<uint8_t>(A - Reg2);
-  if(Evaluation == 0) SetBit(F, FLAG_Z);
+void CPU::SUB(uint8_t reg2) {
+  uint8_t evaluation = static_cast<uint8_t>(A - reg2);
+  if(evaluation == 0) SetBit(F, FLAG_Z);
   SetBit(F, FLAG_N);
-  (A & 0x0F) > (Reg2 & 0x0F) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
-  if(Evaluation < 0x00) SetBit(F, FLAG_C);
-  A = Evaluation;
+  (A & 0x0F) > (reg2 & 0x0F) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  if(evaluation < 0x00) SetBit(F, FLAG_C);
+  A = evaluation;
 }
 
-void CPU::SBC(uint8_t Reg2) {
-  uint8_t Carry = GetBit(F, FLAG_C);
-  uint8_t Evaluation = static_cast<uint8_t>(A - (Reg2 + Carry));
+void CPU::SBC(uint8_t reg2) {
+  uint8_t carry = GetBit(F, FLAG_C);
+  uint8_t evaluation = static_cast<uint8_t>(A - (reg2 + carry));
   SetBit(F, FLAG_N);
-  (Reg2 & 0x0F + Carry > A & 0x0F) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
-  Evaluation < 0 ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
-  A = Evaluation;
+  (reg2 & 0x0F + carry > A & 0x0F) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  evaluation < 0 ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
+  A = evaluation;
 }
 
-void CPU::AND(uint8_t Reg2) {
-  A &= Reg2;
+void CPU::AND(uint8_t reg2) {
+  A &= reg2;
   A == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
   SetBit(F, FLAG_H);
   ClearBit(F, FLAG_C);
 }
 
-void CPU::XOR(uint8_t Reg2) {
-  A ^= Reg2;
+void CPU::XOR(uint8_t reg2) {
+  A ^= reg2;
   A == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
   ClearBit(F, FLAG_H);
   ClearBit(F, FLAG_C);
 }
 
-void CPU::OR(uint8_t Reg2) {
-  A |= Reg2;
+void CPU::OR(uint8_t reg2) {
+  A |= reg2;
   A == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
   ClearBit(F, FLAG_H);
   ClearBit(F, FLAG_C);
 }
 
-void CPU::INC(uint8_t &Reg) {
-  Reg & 0xF == 0xF ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
-  Reg += 1;
-  Reg == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
+void CPU::INC(uint8_t &reg) {
+  reg & 0xF == 0xF ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  reg += 1;
+  reg == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
 }
 
-void CPU::INC(Register Reg) {
-  uint16_t Address = Reg.GetRegister();
-  Reg.SetRegister(Address + 1);
+void CPU::INC(Register reg) {
+  uint16_t address = reg.GetRegister();
+  reg.SetRegister(address + 1);
 }
 
 void CPU::INC_SP() {
   SP += 1;
 }
 
-void CPU::DEC(uint8_t &Reg) {
-  Reg & 0xF == 0 ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
-  Reg -= 1;
-  Reg == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
+void CPU::DEC(uint8_t &reg) {
+  reg & 0xF == 0 ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  reg -= 1;
+  reg == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
 }
 
-void CPU::DEC(Register Reg) {
-  uint16_t Address = Reg.GetRegister();
-  Reg.SetRegister(Address - 1);
+void CPU::DEC(Register reg) {
+  uint16_t address = reg.GetRegister();
+  reg.SetRegister(address - 1);
 }
 
 void CPU::DEC_SP() {
   SP -= 1;
+}
+
+void CPU::RET() {
+  
+
 }
 
 
