@@ -13,11 +13,10 @@ class Register {
 
 class CPU {
     public:
-    uint8_t FLAG_Z = 7;
-    uint8_t FLAG_N = 6;
-    uint8_t FLAG_H = 5;
-    uint8_t FLAG_C = 4;
-
+        uint8_t FLAG_Z = 7;
+        uint8_t FLAG_N = 6;
+        uint8_t FLAG_H = 5;
+        uint8_t FLAG_C = 4;
         uint8_t A, B, C, D, E, F, H, L;
         uint16_t SP;
         uint16_t PC;
@@ -41,6 +40,9 @@ class CPU {
         void ToggleBit(uint8_t &byte, uint8_t bit);
         uint8_t GetBit(uint8_t byte, uint8_t bit);
 
+        void PUSH_STACK(Register &reg);
+        void PUSH_STACK16(uint16_t value);
+        void POP_STACK(Register &reg);
         uint16_t READ_STACK();
 
         void LD(uint8_t &reg1, uint8_t reg2);
@@ -62,6 +64,8 @@ class CPU {
         void DEC(Register reg);
         void DEC_SP();
         void RET();
+        void RET_TRUE(uint8_t flag);
+        void RET_FALSE(uint8_t flag);
 
         void Opcode0x00();
         void Opcode0x01();

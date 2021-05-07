@@ -140,6 +140,33 @@ uint16_t CPU::READ_STACK() {
   return FormWord(High, Low);
 }
 
+void CPU::PUSH_STACK(Register &reg) {
+  SP--;
+  mmu->SetMemory(SP, *reg.high);
+  SP -= 2;
+  mmu->SetMemory(SP, *reg.low);
+  SP -= 2;
+}
+
+void CPU::PUSH_STACK16(uint16_t value) {
+  uint8_t upper = static_cast<uint8_t>(value & 0xFF00);
+  uint8_t lower = static_cast<uint8_t>(value & 0x00FF);
+  SP--;
+  mmu->SetMemory(SP, upper);
+  SP -= 2;
+  mmu->SetMemory(SP, lower);
+  SP -= 2;
+}
+
+void CPU::POP_STACK(Register &reg) {
+  uint8_t low = mmu->ReadMemory(SP);
+  SP++;
+  reg.low = &low;
+  uint8_t high = mmu->ReadMemory(SP);
+  SP++;
+  reg.high = &high;
+}
+
 void CPU::LD(uint8_t &reg1, uint8_t reg2) {
   reg1 = reg2;
 }
@@ -264,9 +291,24 @@ void CPU::DEC_SP() {
 }
 
 void CPU::RET() {
-  
-
+  PC = READ_STACK();
 }
+
+void CPU::RET_TRUE(uint8_t flag) {
+  if(flag == 1) {
+    RET();
+    return;
+  }
+}
+
+void CPU::RET_FALSE(uint8_t flag) {
+  if(flag == 0) {
+    RET();
+    return;
+  }
+}
+
+
 
 
 

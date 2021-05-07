@@ -11,7 +11,7 @@ void MMU::LoadROM(MMU* mmu, char *Filename) {
     fclose(f);
 }
 
-uint16_t MMU::ReadMemory(uint16_t Address) {
+uint8_t MMU::ReadMemory(uint16_t Address) {
     return Memory[Address];
 }
 
