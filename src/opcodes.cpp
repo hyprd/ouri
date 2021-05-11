@@ -368,6 +368,26 @@ void CPU::RRC(uint8_t &reg, bool isA = false) {
   if(isA) ClearBit(F, FLAG_Z);
 } 
 
+void CPU::SLA(uint8_t &reg) {
+  uint8_t bit = GetBit(reg, 7);
+  reg << 1;
+  reg == 0 ? ClearBit(F, FLAG_Z) : SetBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+  ClearBit(F, FLAG_H);
+  if(GetBit(F, FLAG_C) != bit) ToggleBit(F, FLAG_C);
+  ClearBit(reg, 0);
+}
+
+void CPU::SRA(uint8_t &reg) {
+  uint8_t bit = GetBit(reg, 0);
+  reg >> 1;
+  reg == 0 ? ClearBit(F, FLAG_Z) : SetBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+  ClearBit(F, FLAG_H);
+  if(GetBit(F, FLAG_C) != bit) ToggleBit(F, FLAG_C);
+  
+}
+
 /* --------------------------------------------------------------------*/
 /* ------------------------------ OPCODES -----------------------------*/
 /* --------------------------------------------------------------------*/
