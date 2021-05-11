@@ -330,15 +330,43 @@ void CPU::JP() {
   PC = FormWord(high, low);
 }
 
-void CPU::RL(uint8_t &reg) {
+void CPU::RL(uint8_t &reg, bool isA = false) {
   uint8_t carry = GetBit(F, FLAG_C);
   reg << 1 | reg >> (-1 & 7);
   if(GetBit(reg, 7) != carry) ToggleBit(reg, 7);
-  SetBit(F, FLAG_Z);
+  isA ? ClearBit(F, FLAG_Z) : SetBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
   ClearBit(F, FLAG_H);
   carry ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
 }
+
+void CPU::RLC(uint8_t &reg, bool isA = false) {
+  RL(reg);
+  uint8_t bit = GetBit(reg, 7);
+  if(bit != GetBit(F, FLAG_C)) ToggleBit(F, FLAG_C);
+  if(bit != GetBit(reg, 0)) ToggleBit(reg, 0);
+  // set isA to true for opcode 0x07, false otherwise
+  // RLC in 0x07 clears the zero flag, RLC in CB-prefixed instructions don't
+  if(isA) ClearBit(F, FLAG_Z);
+} 
+
+void CPU::RR(uint8_t &reg, bool isA = false) {
+  uint8_t carry = GetBit(F, FLAG_C);
+  reg >> 1 | reg << (-1 & 7);
+  if(GetBit(reg, 7) != carry) ToggleBit(reg, 7);
+  isA ? ClearBit(F, FLAG_Z) : SetBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+  ClearBit(F, FLAG_H);
+  carry ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
+}
+
+void CPU::RRC(uint8_t &reg, bool isA = false) {
+  RR(reg);
+  uint8_t bit = GetBit(reg, 7);
+  if(bit != GetBit(F, FLAG_C)) ToggleBit(F, FLAG_C);
+  if(bit != GetBit(reg, 0)) ToggleBit(reg, 0);
+  if(isA) ClearBit(F, FLAG_Z);
+} 
 
 /* --------------------------------------------------------------------*/
 /* ------------------------------ OPCODES -----------------------------*/

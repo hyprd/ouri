@@ -70,11 +70,10 @@ class CPU {
         void CALL();
         void JR();
         void JP();
-        //
-        void RL(uint8_t &reg);
-        void RLC();
-        void RR();
-        void RRC();
+        void RL(uint8_t &reg, bool isA);
+        void RLC(uint8_t &reg, bool isA);
+        void RR(uint8_t &reg, bool isA);
+        void RRC(uint8_t &reg, bool isA);
         void SLA();
         void SRA();
         void SRL();
