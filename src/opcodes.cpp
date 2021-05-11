@@ -327,7 +327,6 @@ void CPU::JP() {
   uint8_t low = mmu->ReadMemory(PC);
   PC++;
   uint8_t high = mmu->ReadMemory(PC);
-  PC++;
   PC = FormWord(high, low);
 }
 
