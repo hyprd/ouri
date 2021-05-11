@@ -20,6 +20,7 @@ class CPU {
         uint8_t A, B, C, D, E, F, H, L;
         uint16_t SP;
         uint16_t PC;
+        uint16_t RSTVectors[8] = { 0x0000, 0x0008, 0x0010, 0x0018, 0x0020, 0x0028, 0x0030, 0x0038 };
 
         MMU* mmu;
 
@@ -57,6 +58,7 @@ class CPU {
         void AND(uint8_t reg2);
         void XOR(uint8_t reg2);
         void OR(uint8_t reg2);
+        void CP(uint8_t reg);
         void INC(uint8_t &reg);
         void INC(Register reg);
         void INC_SP();
@@ -64,8 +66,31 @@ class CPU {
         void DEC(Register reg);
         void DEC_SP();
         void RET();
-        void RET_TRUE(uint8_t flag);
-        void RET_FALSE(uint8_t flag);
+        void RST(uint8_t byte);
+        void CALL();
+        void JR();
+        void JP();
+        //
+        void RL(uint8_t &reg);
+        void RLC();
+        void RR();
+        void RRC();
+        void SLA();
+        void SRA();
+        void SRL();
+        void SWAP();
+        void BIT();
+        void RES();
+        void SET();
+        void DI();
+        void EI();
+        void STOP();
+        void HALT();
+        void NOP();
+        void DAA();
+        void SCF();
+        void CPL();
+        void CCF();
 
         void Opcode0x00();
         void Opcode0x01();

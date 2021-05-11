@@ -258,6 +258,14 @@ void CPU::OR(uint8_t reg2) {
   ClearBit(F, FLAG_C);
 }
 
+void CPU::CP(uint8_t reg) {
+  uint8_t evaluation = static_cast<uint8_t>(A - reg);
+  evaluation == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
+  SetBit(F, FLAG_N);
+  ((A - reg) & 0x0F < 0) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  A < reg ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
+}
+
 void CPU::INC(uint8_t &reg) {
   reg & 0xF == 0xF ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
   reg += 1;
@@ -294,23 +302,44 @@ void CPU::RET() {
   PC = READ_STACK();
 }
 
-void CPU::RET_TRUE(uint8_t flag) {
-  if(flag == 1) {
-    RET();
-    return;
-  }
+void CPU::RST(uint8_t byte) {
+  PUSH_STACK16(PC);
+  PC = RSTVectors[byte];
 }
 
-void CPU::RET_FALSE(uint8_t flag) {
-  if(flag == 0) {
-    RET();
-    return;
-  }
+void CPU::CALL() {
+  uint8_t high = mmu->ReadMemory(PC);
+  PC++;
+  uint8_t low = mmu->ReadMemory(PC);
+  PC++; 
+  uint16_t imm = FormWord(high, low);
+  PUSH_STACK16(PC);
+  PC = imm;
 }
 
+void CPU::JR() {
+  uint8_t steps = mmu->ReadMemory(PC);
+  PC++;
+  PC += steps;
+}
 
+void CPU::JP() {
+  uint8_t low = mmu->ReadMemory(PC);
+  PC++;
+  uint8_t high = mmu->ReadMemory(PC);
+  PC++;
+  PC = FormWord(high, low);
+}
 
-
+void CPU::RL(uint8_t &reg) {
+  uint8_t carry = GetBit(F, FLAG_C);
+  reg << 1 | reg >> (-1 & 7);
+  if(GetBit(reg, 7) != carry) ToggleBit(reg, 7);
+  SetBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+  ClearBit(F, FLAG_H);
+  carry ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
+}
 
 /* --------------------------------------------------------------------*/
 /* ------------------------------ OPCODES -----------------------------*/
