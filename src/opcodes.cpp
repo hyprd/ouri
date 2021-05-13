@@ -404,6 +404,18 @@ void CPU::BIT(uint8_t &reg, uint8_t bit) {
   SetBit(F, FLAG_H);
 }
 
+void CPU::RES(uint8_t &reg, uint8_t bit) {
+  ClearBit(reg, bit);
+}
+
+void CPU::SET(uint8_t &reg, uint8_t bit) {
+  SetBit(reg, bit);
+}
+
+void CPU::DI() {
+  interruptsEnabled = true;
+}
+
 /* --------------------------------------------------------------------*/
 /* ------------------------------ OPCODES -----------------------------*/
 /* --------------------------------------------------------------------*/
