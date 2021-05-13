@@ -36,8 +36,10 @@ class CPU {
         void PopulateOpcodes();
     
     private:
-        bool InterruptsEnabled = false;
-        
+        bool interruptsEnabled = false;
+        bool stopped = false;
+        bool halted = false;
+
         void SetBit(uint8_t &byte, uint8_t bit);
         void ClearBit(uint8_t &byte, uint8_t bit);
         void ToggleBit(uint8_t &byte, uint8_t bit);
@@ -81,7 +83,6 @@ class CPU {
         void SRL(uint8_t &reg);
         void SWAP(uint8_t &reg);
         void BIT(uint8_t &reg, uint8_t bit);
-        //
         void RES(uint8_t &reg, uint8_t bit);
         void SET(uint8_t &reg, uint8_t bit);
         void DI();
@@ -89,10 +90,10 @@ class CPU {
         void STOP();
         void HALT();
         void NOP();
-        void DAA();
         void SCF();
         void CPL();
         void CCF();
+        void DAA();
 
         void Opcode0x00();
         void Opcode0x01();

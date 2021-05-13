@@ -413,14 +413,68 @@ void CPU::SET(uint8_t &reg, uint8_t bit) {
 }
 
 void CPU::DI() {
+  interruptsEnabled = false;
+}
+
+void CPU::EI() {
   interruptsEnabled = true;
+}
+
+void CPU::STOP() {
+  stopped = true;
+}
+
+void CPU::HALT() {
+  halted = true;  
+}
+
+void CPU::SCF() {
+  SetBit(F, FLAG_C);
+}
+
+void CPU::CPL() {
+  A = ~A;
+  SetBit(F, FLAG_N);
+  SetBit(F, FLAG_H);
+}
+
+void CPU::CCF() {
+  ToggleBit(F, FLAG_C);
+}
+
+void CPU::DAA() {
+  uint8_t sub = GetBit(F, FLAG_N);
+  uint8_t half = GetBit(F, FLAG_H);
+  uint8_t carry = GetBit(F, FLAG_C);
+
+  // adjust if carry occurred or result overflows uint8 after add
+  if(!sub) {
+    // 0x60 for full carry, 0x06 when half carry occurs
+    if(carry || A > 0x99) {
+      A += 0x60;
+      SetBit(F, FLAG_C);
+    }
+    if(half || (A & 0x0F) > 0x09) {
+      A += 0x06; 
+    }
+  // adjust if carry occurred or result overflows uint8 after sub
+  } else {
+    if(carry) {
+      A -= 0x60;
+    }
+    if(half) {
+      A -= 0x06;
+    }
+  }
+  A == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
+  ClearBit(F, FLAG_H);
 }
 
 /* --------------------------------------------------------------------*/
 /* ------------------------------ OPCODES -----------------------------*/
 /* --------------------------------------------------------------------*/
 void CPU::Opcode0x00() {
-  std::cout << "NOP" << std::endl;
+  // NOP
 }
 
 void CPU::Opcode0x01() {
