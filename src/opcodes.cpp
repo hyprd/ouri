@@ -457,7 +457,7 @@ void CPU::DAA() {
     if(half || (A & 0x0F) > 0x09) {
       A += 0x06; 
     }
-  // adjust if carry occurred or result overflows uint8 after sub
+  // adjust if carry occurred after sub
   } else {
     if(carry) {
       A -= 0x60;
