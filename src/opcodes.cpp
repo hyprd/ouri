@@ -385,7 +385,23 @@ void CPU::SRA(uint8_t &reg) {
   ClearBit(F, FLAG_N);
   ClearBit(F, FLAG_H);
   if(GetBit(F, FLAG_C) != bit) ToggleBit(F, FLAG_C);
-  
+}
+
+void CPU::SRL(uint8_t &reg) {
+  // SRL only differs from SRA 
+  SRA(reg);
+  ClearBit(reg, 7);
+}
+
+void CPU::SWAP(uint8_t &reg) {
+  reg = (reg & 0x0F) << 4 | reg >> 4;
+  reg == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
+}
+
+void CPU::BIT(uint8_t &reg, uint8_t bit) {
+  GetBit(reg, bit) == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
+  ClearBit(F, FLAG_N);
+  SetBit(F, FLAG_H);
 }
 
 /* --------------------------------------------------------------------*/

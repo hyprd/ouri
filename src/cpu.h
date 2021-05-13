@@ -76,9 +76,10 @@ class CPU {
         void RRC(uint8_t &reg, bool isA);
         void SLA(uint8_t &reg);
         void SRA(uint8_t &reg);
-        void SRL();
-        void SWAP();
-        void BIT();
+        void SRL(uint8_t &reg);
+        void SWAP(uint8_t &reg);
+        //
+        void BIT(uint8_t &reg, uint8_t bit);
         void RES();
         void SET();
         void DI();
