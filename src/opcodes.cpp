@@ -302,8 +302,8 @@ void CPU::PUSH_STACK(Register &reg) {
 }
 
 void CPU::PUSH_STACK16(uint16_t value) {
-  uint8_t upper = static_cast < uint8_t > (value &0xFF00);
-  uint8_t lower = static_cast < uint8_t > (value &0x00FF);
+  uint8_t upper = static_cast <uint8_t> (value &0xFF00);
+  uint8_t lower = static_cast <uint8_t> (value &0x00FF);
   SP--;
   mmu -> SetMemory(SP, upper);
   SP -= 2;
@@ -341,7 +341,7 @@ void CPU::LD(uint8_t &reg1, uint16_t address) {
 }
 
 void CPU::ADD(uint8_t reg2) {
-  uint8_t evaluation = static_cast < uint8_t > (A + reg2);
+  uint8_t evaluation = static_cast <uint8_t> (A + reg2);
   if (evaluation == 0) SetBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
   if ((A & 0x0F) + (reg2 & 0x0F) > 0x0F) SetBit(F, FLAG_H);
@@ -351,7 +351,7 @@ void CPU::ADD(uint8_t reg2) {
 
 void CPU::ADD_HL(uint16_t reg2) {
   ClearBit(F, FLAG_N);
-  uint16_t evaluation = static_cast < uint16_t > ((HL.GetRegister() + reg2) &0x0FFF);
+  uint16_t evaluation = static_cast <uint16_t> ((HL.GetRegister() + reg2) & 0x0FFF);
   (evaluation > 0x0FFF) ? SetBit(F, FLAG_H): ClearBit(F, FLAG_H);
   (HL.GetRegister() + reg2) > 0xFFFF ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
   HL.SetRegister(evaluation);
@@ -364,13 +364,13 @@ void CPU::ADD_SP() {
   ClearBit(F, FLAG_N);
   ((SP & 0x0FFF) + imm) > 0x0FFF ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
   (SP + imm) > 0xFFFF ? SetBit(F, FLAG_C) : SetBit(F, FLAG_C);
-  SP += static_cast < int16_t > (imm);
+  SP += static_cast <int16_t> (imm);
 }
 
 void CPU::ADC(uint8_t reg2) {
   uint8_t carry = GetBit(F, FLAG_C);
   ClearBit(F, FLAG_N);
-  uint8_t evaluation = static_cast < uint8_t > (A + reg2 + carry);
+  uint8_t evaluation = static_cast <uint8_t> (A + reg2 + carry);
   evaluation == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
   (A + reg2) & 0x0F + carry > 0x0F ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
   evaluation > 0xFF ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
@@ -378,7 +378,7 @@ void CPU::ADC(uint8_t reg2) {
 }
 
 void CPU::SUB(uint8_t reg2) {
-  uint8_t evaluation = static_cast < uint8_t > (A - reg2);
+  uint8_t evaluation = static_cast <uint8_t> (A - reg2);
   if (evaluation == 0) SetBit(F, FLAG_Z);
   SetBit(F, FLAG_N);
   (A & 0x0F) > (reg2 &0x0F) ? SetBit(F, FLAG_H): ClearBit(F, FLAG_H);
@@ -388,7 +388,7 @@ void CPU::SUB(uint8_t reg2) {
 
 void CPU::SBC(uint8_t reg2) {
   uint8_t carry = GetBit(F, FLAG_C);
-  uint8_t evaluation = static_cast < uint8_t > (A - (reg2 + carry));
+  uint8_t evaluation = static_cast <uint8_t> (A - (reg2 + carry));
   SetBit(F, FLAG_N);
   (reg2 & 0x0F + carry > A & 0x0F) ? SetBit(F, FLAG_H): ClearBit(F, FLAG_H);
   evaluation < 0 ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
@@ -420,7 +420,7 @@ void CPU::OR(uint8_t reg2) {
 }
 
 void CPU::CP(uint8_t reg) {
-  uint8_t evaluation = static_cast < uint8_t > (A - reg);
+  uint8_t evaluation = static_cast <uint8_t> (A - reg);
   evaluation == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
   SetBit(F, FLAG_N);
   ((A - reg) & 0x0F < 0) ? SetBit(F, FLAG_H): ClearBit(F, FLAG_H);
@@ -1549,14 +1549,14 @@ void CPU::Opcode0xDF() {
 }
 
 void CPU::Opcode0xE0() {
-  LD(static_cast < uint16_t > (0xFF00 + mmu->ReadMemory(PC)), A);
+  LD(static_cast <uint16_t> (0xFF00 + mmu->ReadMemory(PC)), A);
   PC++;
 }
 void CPU::Opcode0xE1() {
   POP_STACK(HL);
 }
 void CPU::Opcode0xE2() {
-  LD(static_cast < uint16_t > (0xFF00 + C), A);
+  LD(static_cast <uint16_t> (0xFF00 + C), A);
 }
 void CPU::Opcode0xE3() {}
 void CPU::Opcode0xE4() {}
@@ -1591,14 +1591,14 @@ void CPU::Opcode0xEF() {
   RST(7);
 }
 void CPU::Opcode0xF0() {
-  LD(A, static_cast < uint16_t > (0xFF00 + mmu->ReadMemory(PC)));
+  LD(A, static_cast <uint16_t> (0xFF00 + mmu->ReadMemory(PC)));
   PC++;
 }
 void CPU::Opcode0xF1() {
   POP_STACK(AF);
 }
 void CPU::Opcode0xF2() {
-  LD(A, static_cast < uint16_t > (0xFF00 + C));
+  LD(A, static_cast <uint16_t> (0xFF00 + C));
 }
 void CPU::Opcode0xF3() {
   interruptsEnabled = false;
