@@ -29,7 +29,7 @@ class CPU {
 
         void Initialise();
         void Cycle();
-        void Execute(uint8_t Instruction);
+        void Execute(uint8_t instruction);
 
         typedef void (CPU::*Opcode)(void);
         Opcode Opcodes[0x100] = {0};

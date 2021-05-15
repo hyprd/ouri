@@ -3,6 +3,7 @@
 #include "helpers.h"
 
 void CPU::PopulateOpcodes() {
+  std::cout << "[INFO] Populating opcodes..." << std::endl;
   Opcodes[0x00] = &CPU::Opcode0x00;
   Opcodes[0x01] = &CPU::Opcode0x01;
   Opcodes[0x02] = &CPU::Opcode0x02;
@@ -259,7 +260,7 @@ void CPU::PopulateOpcodes() {
   Opcodes[0xFD] = &CPU::Opcode0xFD;
   Opcodes[0xFE] = &CPU::Opcode0xFE;
   Opcodes[0xFF] = &CPU::Opcode0xFF;
-
+  std::cout << "[INFO] Done." << std::endl;
 }
 
 /* --------------------------------------------------------------------*/
@@ -295,19 +296,19 @@ uint16_t CPU::READ_STACK() {
 
 void CPU::PUSH_STACK(Register &reg) {
   SP--;
-  mmu -> SetMemory(SP, * reg.high);
+  mmu->SetMemory(SP, * reg.high);
   SP -= 2;
-  mmu -> SetMemory(SP, * reg.low);
+  mmu->SetMemory(SP, * reg.low);
   SP -= 2;
 }
 
 void CPU::PUSH_STACK16(uint16_t value) {
-  uint8_t upper = static_cast <uint8_t> (value &0xFF00);
-  uint8_t lower = static_cast <uint8_t> (value &0x00FF);
+  uint8_t upper = static_cast <uint8_t> (value & 0xFF00);
+  uint8_t lower = static_cast <uint8_t> (value & 0x00FF);
   SP--;
-  mmu -> SetMemory(SP, upper);
+  mmu->SetMemory(SP, upper);
   SP -= 2;
-  mmu -> SetMemory(SP, lower);
+  mmu->SetMemory(SP, lower);
   SP -= 2;
 }
 
@@ -333,7 +334,7 @@ void CPU::LD(uint8_t &reg1, uint8_t reg2) {
 }
 
 void CPU::LD(uint16_t address, uint8_t reg) {
-  mmu -> SetMemory(address, reg);
+  mmu->SetMemory(address, reg);
 }
 
 void CPU::LD(uint8_t &reg1, uint16_t address) {
@@ -479,7 +480,7 @@ void CPU::CALL() {
 }
 
 void CPU::JR() {
-  uint8_t steps = mmu->ReadMemory(PC);
+  int8_t steps = static_cast<int8_t>(mmu->ReadMemory(PC));
   PC++;
   PC += steps;
 }
@@ -497,7 +498,7 @@ void CPU::JP_HL() {
 
 void CPU::RL(uint8_t &reg, bool isA = false) {
   uint8_t carry = GetBit(F, FLAG_C);
-  reg << 1 | reg >> (-1 &7);
+  reg << 1 | reg >> (-1 & 7);
   if (GetBit(reg, 7) != carry) ToggleBit(reg, 7);
   isA ? ClearBit(F, FLAG_Z) : SetBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
@@ -506,13 +507,15 @@ void CPU::RL(uint8_t &reg, bool isA = false) {
 }
 
 void CPU::RLC(uint8_t &reg, bool isA = false) {
-  RL(reg);
   uint8_t bit = GetBit(reg, 7);
-  if (bit != GetBit(F, FLAG_C)) ToggleBit(F, FLAG_C);
-  if (bit != GetBit(reg, 0)) ToggleBit(reg, 0);
-  // set isA to true for opcode 0x07, false otherwise
-  // RLC in 0x07 clears the zero flag, RLC in CB-prefixed instructions don't
-  if (isA) ClearBit(F, FLAG_Z);
+  reg <<= 1;
+  if(bit) {
+    SetBit(F, FLAG_C);
+    SetBit(reg, 0);
+  } else {
+    ClearBit(F, FLAG_C);
+  }
+  !isA ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
 }
 
 void CPU::RR(uint8_t &reg, bool isA = false) {
@@ -1457,8 +1460,7 @@ void CPU::Opcode0xCA() {
     PC++;
   }
 }
-void CPU::Opcode0xCB() {
-  /* cb-prefix inst*/ }
+void CPU::Opcode0xCB() { /* cb-prefix inst*/ }
 void CPU::Opcode0xCC() {
   if (GetBit(F, FLAG_Z)) {
     CALL();
@@ -1577,7 +1579,7 @@ void CPU::Opcode0xE9() {
   JP_HL();
 }
 void CPU::Opcode0xEA() {
-  mmu -> SetMemory(FormWord(mmu->ReadMemory(PC), mmu->ReadMemory(PC + 1)), A);
+  mmu->SetMemory(FormWord(mmu->ReadMemory(PC), mmu->ReadMemory(PC + 1)), A);
   PC += 2;
 }
 void CPU::Opcode0xEB() {}

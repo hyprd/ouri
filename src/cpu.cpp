@@ -31,7 +31,7 @@ CPU::CPU(MMU* _mmu) {
 } 
 
 void CPU::Initialise() {
-    std::cout << "[INFO] Initialising CPU..." << std::endl;
+    std::cout << "\n[INFO] Initialising CPU..." << std::endl;
     PC = 0x0100;
     SP = 0xFFFE;
     std::cout << "[INFO] Done." << std::endl;
@@ -39,10 +39,10 @@ void CPU::Initialise() {
 
 void CPU::Cycle() {
     Execute(mmu->ReadMemory(PC));
-    PC++;
 }
 
-void CPU::Execute(uint8_t Instruction) {
-    // std::cout << "Instruction: " << std::hex << std::uppercase << +Instruction << "\tPC: " << PC << std::endl;
-    (this->*Opcodes[Instruction])();
+void CPU::Execute(uint8_t instruction) {
+    if(instruction != 0) std::cout << "Instruction: 0x" << std::hex << std::uppercase << +instruction << "\tPC: " << PC << std::endl;
+    (this->*Opcodes[instruction])();
+    PC++;
 }
