@@ -1,4 +1,5 @@
 #include "opcodes.h"
+
 #include "helpers.h"
 
 void CPU::PopulateOpcodes() {
@@ -264,16 +265,16 @@ void CPU::PopulateOpcodes() {
 /* --------------------------------------------------------------------*/
 /* ------------------------------   BITS  -----------------------------*/
 /* --------------------------------------------------------------------*/
-void CPU::SetBit(uint8_t &byte, uint8_t bit) { 
-  byte |= 1UL << bit; 
+void CPU::SetBit(uint8_t &byte, uint8_t bit) {
+  byte |= 1UL << bit;
 }
 
-void CPU::ClearBit(uint8_t &byte, uint8_t bit) { 
-  byte &= ~(1UL << bit); 
+void CPU::ClearBit(uint8_t &byte, uint8_t bit) {
+  byte &= ~(1UL << bit);
 }
 
-void CPU::ToggleBit(uint8_t &byte, uint8_t bit) { 
-  byte ^= 1UL << bit; 
+void CPU::ToggleBit(uint8_t &byte, uint8_t bit) {
+  byte ^= 1UL << bit;
 }
 
 uint8_t CPU::GetBit(uint8_t byte, uint8_t bit) {
@@ -294,19 +295,19 @@ uint16_t CPU::READ_STACK() {
 
 void CPU::PUSH_STACK(Register &reg) {
   SP--;
-  mmu->SetMemory(SP, *reg.high);
+  mmu -> SetMemory(SP, * reg.high);
   SP -= 2;
-  mmu->SetMemory(SP, *reg.low);
+  mmu -> SetMemory(SP, * reg.low);
   SP -= 2;
 }
 
 void CPU::PUSH_STACK16(uint16_t value) {
-  uint8_t upper = static_cast<uint8_t>(value & 0xFF00);
-  uint8_t lower = static_cast<uint8_t>(value & 0x00FF);
+  uint8_t upper = static_cast < uint8_t > (value &0xFF00);
+  uint8_t lower = static_cast < uint8_t > (value &0x00FF);
   SP--;
-  mmu->SetMemory(SP, upper);
+  mmu -> SetMemory(SP, upper);
   SP -= 2;
-  mmu->SetMemory(SP, lower);
+  mmu -> SetMemory(SP, lower);
   SP -= 2;
 }
 
@@ -332,7 +333,7 @@ void CPU::LD(uint8_t &reg1, uint8_t reg2) {
 }
 
 void CPU::LD(uint16_t address, uint8_t reg) {
-  mmu->SetMemory(address, reg);
+  mmu -> SetMemory(address, reg);
 }
 
 void CPU::LD(uint8_t &reg1, uint16_t address) {
@@ -340,18 +341,18 @@ void CPU::LD(uint8_t &reg1, uint16_t address) {
 }
 
 void CPU::ADD(uint8_t reg2) {
-  uint8_t evaluation = static_cast<uint8_t>(A + reg2);
-  if(evaluation == 0) SetBit(F, FLAG_Z);
+  uint8_t evaluation = static_cast < uint8_t > (A + reg2);
+  if (evaluation == 0) SetBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
-  if((A & 0x0F) + (reg2 & 0x0F) > 0x0F) SetBit(F, FLAG_H);
-  if(evaluation > 0xFF) SetBit(F, FLAG_C);
+  if ((A & 0x0F) + (reg2 & 0x0F) > 0x0F) SetBit(F, FLAG_H);
+  if (evaluation > 0xFF) SetBit(F, FLAG_C);
   A = evaluation;
 }
 
 void CPU::ADD_HL(uint16_t reg2) {
   ClearBit(F, FLAG_N);
-  uint16_t evaluation = static_cast<uint16_t>((HL.GetRegister() + reg2) & 0x0FFF);
-  (evaluation > 0x0FFF) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H); 
+  uint16_t evaluation = static_cast < uint16_t > ((HL.GetRegister() + reg2) &0x0FFF);
+  (evaluation > 0x0FFF) ? SetBit(F, FLAG_H): ClearBit(F, FLAG_H);
   (HL.GetRegister() + reg2) > 0xFFFF ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
   HL.SetRegister(evaluation);
 }
@@ -363,33 +364,33 @@ void CPU::ADD_SP() {
   ClearBit(F, FLAG_N);
   ((SP & 0x0FFF) + imm) > 0x0FFF ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
   (SP + imm) > 0xFFFF ? SetBit(F, FLAG_C) : SetBit(F, FLAG_C);
-  SP += static_cast<int16_t>(imm);
+  SP += static_cast < int16_t > (imm);
 }
 
 void CPU::ADC(uint8_t reg2) {
   uint8_t carry = GetBit(F, FLAG_C);
   ClearBit(F, FLAG_N);
-  uint8_t evaluation = static_cast<uint8_t>(A + reg2 + carry);
-  evaluation == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z); 
+  uint8_t evaluation = static_cast < uint8_t > (A + reg2 + carry);
+  evaluation == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
   (A + reg2) & 0x0F + carry > 0x0F ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
   evaluation > 0xFF ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
   A = evaluation;
 }
 
 void CPU::SUB(uint8_t reg2) {
-  uint8_t evaluation = static_cast<uint8_t>(A - reg2);
-  if(evaluation == 0) SetBit(F, FLAG_Z);
+  uint8_t evaluation = static_cast < uint8_t > (A - reg2);
+  if (evaluation == 0) SetBit(F, FLAG_Z);
   SetBit(F, FLAG_N);
-  (A & 0x0F) > (reg2 & 0x0F) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
-  if(evaluation < 0x00) SetBit(F, FLAG_C);
+  (A & 0x0F) > (reg2 &0x0F) ? SetBit(F, FLAG_H): ClearBit(F, FLAG_H);
+  if (evaluation < 0x00) SetBit(F, FLAG_C);
   A = evaluation;
 }
 
 void CPU::SBC(uint8_t reg2) {
   uint8_t carry = GetBit(F, FLAG_C);
-  uint8_t evaluation = static_cast<uint8_t>(A - (reg2 + carry));
+  uint8_t evaluation = static_cast < uint8_t > (A - (reg2 + carry));
   SetBit(F, FLAG_N);
-  (reg2 & 0x0F + carry > A & 0x0F) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  (reg2 & 0x0F + carry > A & 0x0F) ? SetBit(F, FLAG_H): ClearBit(F, FLAG_H);
   evaluation < 0 ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
   A = evaluation;
 }
@@ -419,10 +420,10 @@ void CPU::OR(uint8_t reg2) {
 }
 
 void CPU::CP(uint8_t reg) {
-  uint8_t evaluation = static_cast<uint8_t>(A - reg);
+  uint8_t evaluation = static_cast < uint8_t > (A - reg);
   evaluation == 0 ? SetBit(F, FLAG_Z) : ClearBit(F, FLAG_Z);
   SetBit(F, FLAG_N);
-  ((A - reg) & 0x0F < 0) ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
+  ((A - reg) & 0x0F < 0) ? SetBit(F, FLAG_H): ClearBit(F, FLAG_H);
   A < reg ? SetBit(F, FLAG_C) : ClearBit(F, FLAG_C);
 }
 
@@ -471,7 +472,7 @@ void CPU::CALL() {
   uint8_t high = mmu->ReadMemory(PC);
   PC++;
   uint8_t low = mmu->ReadMemory(PC);
-  PC++; 
+  PC++;
   uint16_t imm = FormWord(high, low);
   PUSH_STACK16(PC);
   PC = imm;
@@ -496,8 +497,8 @@ void CPU::JP_HL() {
 
 void CPU::RL(uint8_t &reg, bool isA = false) {
   uint8_t carry = GetBit(F, FLAG_C);
-  reg << 1 | reg >> (-1 & 7);
-  if(GetBit(reg, 7) != carry) ToggleBit(reg, 7);
+  reg << 1 | reg >> (-1 &7);
+  if (GetBit(reg, 7) != carry) ToggleBit(reg, 7);
   isA ? ClearBit(F, FLAG_Z) : SetBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
   ClearBit(F, FLAG_H);
@@ -507,17 +508,17 @@ void CPU::RL(uint8_t &reg, bool isA = false) {
 void CPU::RLC(uint8_t &reg, bool isA = false) {
   RL(reg);
   uint8_t bit = GetBit(reg, 7);
-  if(bit != GetBit(F, FLAG_C)) ToggleBit(F, FLAG_C);
-  if(bit != GetBit(reg, 0)) ToggleBit(reg, 0);
+  if (bit != GetBit(F, FLAG_C)) ToggleBit(F, FLAG_C);
+  if (bit != GetBit(reg, 0)) ToggleBit(reg, 0);
   // set isA to true for opcode 0x07, false otherwise
   // RLC in 0x07 clears the zero flag, RLC in CB-prefixed instructions don't
-  if(isA) ClearBit(F, FLAG_Z);
-} 
+  if (isA) ClearBit(F, FLAG_Z);
+}
 
 void CPU::RR(uint8_t &reg, bool isA = false) {
   uint8_t carry = GetBit(F, FLAG_C);
   reg >> 1 | reg << (-1 & 7);
-  if(GetBit(reg, 7) != carry) ToggleBit(reg, 7);
+  if (GetBit(reg, 7) != carry) ToggleBit(reg, 7);
   isA ? ClearBit(F, FLAG_Z) : SetBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
   ClearBit(F, FLAG_H);
@@ -527,10 +528,10 @@ void CPU::RR(uint8_t &reg, bool isA = false) {
 void CPU::RRC(uint8_t &reg, bool isA = false) {
   RR(reg);
   uint8_t bit = GetBit(reg, 7);
-  if(bit != GetBit(F, FLAG_C)) ToggleBit(F, FLAG_C);
-  if(bit != GetBit(reg, 0)) ToggleBit(reg, 0);
-  if(isA) ClearBit(F, FLAG_Z);
-} 
+  if (bit != GetBit(F, FLAG_C)) ToggleBit(F, FLAG_C);
+  if (bit != GetBit(reg, 0)) ToggleBit(reg, 0);
+  if (isA) ClearBit(F, FLAG_Z);
+}
 
 void CPU::SLA(uint8_t &reg) {
   uint8_t bit = GetBit(reg, 7);
@@ -538,7 +539,7 @@ void CPU::SLA(uint8_t &reg) {
   reg == 0 ? ClearBit(F, FLAG_Z) : SetBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
   ClearBit(F, FLAG_H);
-  if(GetBit(F, FLAG_C) != bit) ToggleBit(F, FLAG_C);
+  if (GetBit(F, FLAG_C) != bit) ToggleBit(F, FLAG_C);
   ClearBit(reg, 0);
 }
 
@@ -548,11 +549,10 @@ void CPU::SRA(uint8_t &reg) {
   reg == 0 ? ClearBit(F, FLAG_Z) : SetBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
   ClearBit(F, FLAG_H);
-  if(GetBit(F, FLAG_C) != bit) ToggleBit(F, FLAG_C);
+  if (GetBit(F, FLAG_C) != bit) ToggleBit(F, FLAG_C);
 }
 
 void CPU::SRL(uint8_t &reg) {
-  // SRL only differs from SRA 
   SRA(reg);
   ClearBit(reg, 7);
 }
@@ -589,7 +589,7 @@ void CPU::STOP() {
 }
 
 void CPU::HALT() {
-  halted = true;  
+  halted = true;
 }
 
 void CPU::SCF() {
@@ -612,21 +612,21 @@ void CPU::DAA() {
   uint8_t carry = GetBit(F, FLAG_C);
 
   // adjust if carry occurred or result overflows uint8 after add
-  if(!sub) {
+  if (!sub) {
     // 0x60 for full carry, 0x06 when half carry occurs
-    if(carry || A > 0x99) {
+    if (carry || A > 0x99) {
       A += 0x60;
       SetBit(F, FLAG_C);
     }
-    if(half || (A & 0x0F) > 0x09) {
-      A += 0x06; 
+    if (half || (A & 0x0F) > 0x09) {
+      A += 0x06;
     }
-  // adjust if carry occurred after sub
+    // adjust if carry occurred after sub
   } else {
-    if(carry) {
+    if (carry) {
       A -= 0x60;
     }
-    if(half) {
+    if (half) {
       A -= 0x06;
     }
   }
@@ -642,11 +642,11 @@ void CPU::Opcode0x00() {
 }
 
 void CPU::Opcode0x01() {
-    uint8_t high = mmu->ReadMemory(PC);
-    PC++;
-    uint8_t low = mmu->ReadMemory(PC);
-    PC++;
-    BC.SetRegister(FormWord(high, low));
+  uint8_t high = mmu->ReadMemory(PC);
+  PC++;
+  uint8_t low = mmu->ReadMemory(PC);
+  PC++;
+  BC.SetRegister(FormWord(high, low));
 }
 
 void CPU::Opcode0x02() {
@@ -666,7 +666,7 @@ void CPU::Opcode0x05() {
 }
 
 void CPU::Opcode0x06() {
-  LD(B, mmu -> ReadMemory(PC++));
+  LD(B, mmu->ReadMemory(PC++));
 }
 
 void CPU::Opcode0x07() {
@@ -674,12 +674,12 @@ void CPU::Opcode0x07() {
 }
 
 void CPU::Opcode0x08() {
-    uint8_t high = mmu->ReadMemory(PC);
-    PC++;
-    uint8_t low = mmu->ReadMemory(PC);
-    PC++;
-    uint16_t Word = FormWord(high, low);
-    LD(mmu->ReadMemory(FormWord(high, low)), SP);
+  uint8_t high = mmu->ReadMemory(PC);
+  PC++;
+  uint8_t low = mmu->ReadMemory(PC);
+  PC++;
+  uint16_t Word = FormWord(high, low);
+  LD(mmu->ReadMemory(FormWord(high, low)), SP);
 }
 
 void CPU::Opcode0x09() {
@@ -716,11 +716,11 @@ void CPU::Opcode0x10() {
 }
 
 void CPU::Opcode0x11() {
-    uint8_t high = mmu->ReadMemory(PC);
-    PC++;
-    uint8_t low = mmu->ReadMemory(PC);
-    PC++;
-    DE.SetRegister(FormWord(high, low));
+  uint8_t high = mmu->ReadMemory(PC);
+  PC++;
+  uint8_t low = mmu->ReadMemory(PC);
+  PC++;
+  DE.SetRegister(FormWord(high, low));
 }
 
 void CPU::Opcode0x12() {
@@ -740,7 +740,7 @@ void CPU::Opcode0x15() {
 }
 
 void CPU::Opcode0x16() {
-  LD(D, mmu -> ReadMemory(PC++));
+  LD(D, mmu->ReadMemory(PC++));
 }
 
 void CPU::Opcode0x17() {
@@ -772,7 +772,8 @@ void CPU::Opcode0x1D() {
 }
 
 void CPU::Opcode0x1E() {
-  LD(E, mmu -> ReadMemory(PC++));
+  LD(E, mmu->ReadMemory(PC));
+  PC++;
 }
 
 void CPU::Opcode0x1F() {
@@ -780,7 +781,7 @@ void CPU::Opcode0x1F() {
 }
 
 void CPU::Opcode0x20() {
-  if(!GetBit(F, FLAG_Z)) {
+  if (!GetBit(F, FLAG_Z)) {
     JR();
   } else {
     PC++;
@@ -788,11 +789,11 @@ void CPU::Opcode0x20() {
 }
 
 void CPU::Opcode0x21() {
-    uint8_t high = mmu->ReadMemory(PC);
-    PC++;
-    uint8_t low = mmu->ReadMemory(PC);
-    PC++;
-    HL.SetRegister(FormWord(high, low));
+  uint8_t high = mmu->ReadMemory(PC);
+  PC++;
+  uint8_t low = mmu->ReadMemory(PC);
+  PC++;
+  HL.SetRegister(FormWord(high, low));
 }
 
 void CPU::Opcode0x22() {
@@ -813,7 +814,8 @@ void CPU::Opcode0x25() {
 }
 
 void CPU::Opcode0x26() {
-  LD(H, mmu -> ReadMemory(PC++));
+  LD(H, mmu->ReadMemory(PC));
+  PC++;
 }
 
 void CPU::Opcode0x27() {
@@ -821,7 +823,7 @@ void CPU::Opcode0x27() {
 }
 
 void CPU::Opcode0x28() {
-  if(GetBit(F, FLAG_Z)) {
+  if (GetBit(F, FLAG_Z)) {
     JR();
   } else {
     PC++;
@@ -850,7 +852,7 @@ void CPU::Opcode0x2D() {
 }
 
 void CPU::Opcode0x2E() {
-  LD(L, mmu -> ReadMemory(PC++));
+  LD(L, mmu->ReadMemory(PC++));
 }
 
 void CPU::Opcode0x2F() {
@@ -858,7 +860,7 @@ void CPU::Opcode0x2F() {
 }
 
 void CPU::Opcode0x30() {
-  if(!GetBit(F, FLAG_C)) {
+  if (!GetBit(F, FLAG_C)) {
     JR();
   } else {
     PC++;
@@ -866,11 +868,11 @@ void CPU::Opcode0x30() {
 }
 
 void CPU::Opcode0x31() {
-    uint8_t high = mmu->ReadMemory(PC);
-    PC++;
-    uint8_t low = mmu->ReadMemory(PC);
-    PC++;
-    this->SP = FormWord(high, low);
+  uint8_t high = mmu->ReadMemory(PC);
+  PC++;
+  uint8_t low = mmu->ReadMemory(PC);
+  PC++;
+  this -> SP = FormWord(high, low);
 }
 
 void CPU::Opcode0x32() {
@@ -893,7 +895,7 @@ void CPU::Opcode0x35() {
 }
 
 void CPU::Opcode0x36() {
-  LD(HL.GetRegister(), mmu -> ReadMemory(PC++));
+  LD(HL.GetRegister(), mmu->ReadMemory(PC++));
 }
 
 void CPU::Opcode0x37() {
@@ -901,7 +903,7 @@ void CPU::Opcode0x37() {
 }
 
 void CPU::Opcode0x38() {
-  if(GetBit(F, FLAG_C)) {
+  if (GetBit(F, FLAG_C)) {
     JR();
   } else {
     PC++;
@@ -930,7 +932,7 @@ void CPU::Opcode0x3D() {
 }
 
 void CPU::Opcode0x3E() {
-  LD(A, mmu -> ReadMemory(PC++));
+  LD(A, mmu->ReadMemory(PC++));
 }
 
 void CPU::Opcode0x3F() {
@@ -1239,15 +1241,15 @@ void CPU::Opcode0x8A() {
 }
 
 void CPU::Opcode0x8B() {
-  ADC(E); 
+  ADC(E);
 }
 
 void CPU::Opcode0x8C() {
-  ADC(H); 
+  ADC(H);
 }
 
 void CPU::Opcode0x8D() {
-  ADC(L); 
+  ADC(L);
 }
 
 void CPU::Opcode0x8E() {
@@ -1258,78 +1260,180 @@ void CPU::Opcode0x8F() {
   ADC(A);
 }
 
-void CPU::Opcode0x90() { SUB(B); }
-void CPU::Opcode0x91() { SUB(C); }
-void CPU::Opcode0x92() { SUB(D); }
-void CPU::Opcode0x93() { SUB(E); }
-void CPU::Opcode0x94() { SUB(H); }
-void CPU::Opcode0x95() { SUB(L); }
-void CPU::Opcode0x96() { SUB(mmu->ReadMemory(HL.GetRegister())); }
-void CPU::Opcode0x97() { SUB(A); }
-void CPU::Opcode0x98() { SBC(B); }
-void CPU::Opcode0x99() { SBC(C); }
-void CPU::Opcode0x9A() { SBC(D); }
-void CPU::Opcode0x9B() { SBC(E); }
-void CPU::Opcode0x9C() { SBC(H); }
-void CPU::Opcode0x9D() { SBC(L); }
-void CPU::Opcode0x9E() { SBC(mmu->ReadMemory(HL.GetRegister())); }
-void CPU::Opcode0x9F() { SBC(A); }
-void CPU::Opcode0xA0() { AND(B) ;}
-void CPU::Opcode0xA1() { AND(C) ;}
-void CPU::Opcode0xA2() { AND(D) ;}
-void CPU::Opcode0xA3() { AND(E) ;}
-void CPU::Opcode0xA4() { AND(H) ;}
-void CPU::Opcode0xA5() { AND(L) ;}
-void CPU::Opcode0xA6() { AND(mmu->ReadMemory(HL.GetRegister()));}
-void CPU::Opcode0xA7() { AND(A) ;}
-void CPU::Opcode0xA8() { XOR(B) ;}
-void CPU::Opcode0xA9() { XOR(C) ;}
-void CPU::Opcode0xAA() { XOR(D) ;}
-void CPU::Opcode0xAB() { XOR(E) ;}
-void CPU::Opcode0xAC() { XOR(H) ;}
-void CPU::Opcode0xAD() { XOR(L) ;}
-void CPU::Opcode0xAE() { XOR(mmu->ReadMemory(HL.GetRegister()));}
-void CPU::Opcode0xAF() { XOR(A) ;}
-void CPU::Opcode0xB0() { OR(B); }
-void CPU::Opcode0xB1() { OR(C); }
-void CPU::Opcode0xB2() { OR(D); }
-void CPU::Opcode0xB3() { OR(E); }
-void CPU::Opcode0xB4() { OR(H); }
-void CPU::Opcode0xB5() { OR(L); }
-void CPU::Opcode0xB6() { OR(mmu ->ReadMemory(HL.GetRegister()));}
-void CPU::Opcode0xB7() { OR(A); }
-void CPU::Opcode0xB8() { CP(B); }
-void CPU::Opcode0xB9() { CP(C); }
-void CPU::Opcode0xBA() { CP(D); }
-void CPU::Opcode0xBB() { CP(E); }
-void CPU::Opcode0xBC() { CP(H); }
-void CPU::Opcode0xBD() { CP(L); }
-void CPU::Opcode0xBE() { CP(mmu->ReadMemory(HL.GetRegister()));}
-void CPU::Opcode0xBF() { CP(A); }
-void CPU::Opcode0xC0() { 
-  if(!GetBit(F, FLAG_Z)) {
-    POP_STACK16();
-  } 
+void CPU::Opcode0x90() {
+  SUB(B);
 }
-void CPU::Opcode0xC1() {POP_STACK(BC);}
+void CPU::Opcode0x91() {
+  SUB(C);
+}
+void CPU::Opcode0x92() {
+  SUB(D);
+}
+void CPU::Opcode0x93() {
+  SUB(E);
+}
+void CPU::Opcode0x94() {
+  SUB(H);
+}
+void CPU::Opcode0x95() {
+  SUB(L);
+}
+void CPU::Opcode0x96() {
+  SUB(mmu->ReadMemory(HL.GetRegister()));
+}
+void CPU::Opcode0x97() {
+  SUB(A);
+}
+void CPU::Opcode0x98() {
+  SBC(B);
+}
+void CPU::Opcode0x99() {
+  SBC(C);
+}
+void CPU::Opcode0x9A() {
+  SBC(D);
+}
+void CPU::Opcode0x9B() {
+  SBC(E);
+}
+void CPU::Opcode0x9C() {
+  SBC(H);
+}
+void CPU::Opcode0x9D() {
+  SBC(L);
+}
+void CPU::Opcode0x9E() {
+  SBC(mmu->ReadMemory(HL.GetRegister()));
+}
+void CPU::Opcode0x9F() {
+  SBC(A);
+}
+void CPU::Opcode0xA0() {
+  AND(B);
+}
+void CPU::Opcode0xA1() {
+  AND(C);
+}
+void CPU::Opcode0xA2() {
+  AND(D);
+}
+void CPU::Opcode0xA3() {
+  AND(E);
+}
+void CPU::Opcode0xA4() {
+  AND(H);
+}
+void CPU::Opcode0xA5() {
+  AND(L);
+}
+void CPU::Opcode0xA6() {
+  AND(mmu->ReadMemory(HL.GetRegister()));
+}
+void CPU::Opcode0xA7() {
+  AND(A);
+}
+void CPU::Opcode0xA8() {
+  XOR(B);
+}
+void CPU::Opcode0xA9() {
+  XOR(C);
+}
+void CPU::Opcode0xAA() {
+  XOR(D);
+}
+void CPU::Opcode0xAB() {
+  XOR(E);
+}
+void CPU::Opcode0xAC() {
+  XOR(H);
+}
+void CPU::Opcode0xAD() {
+  XOR(L);
+}
+void CPU::Opcode0xAE() {
+  XOR(mmu->ReadMemory(HL.GetRegister()));
+}
+void CPU::Opcode0xAF() {
+  XOR(A);
+}
+void CPU::Opcode0xB0() {
+  OR(B);
+}
+void CPU::Opcode0xB1() {
+  OR(C);
+}
+void CPU::Opcode0xB2() {
+  OR(D);
+}
+void CPU::Opcode0xB3() {
+  OR(E);
+}
+void CPU::Opcode0xB4() {
+  OR(H);
+}
+void CPU::Opcode0xB5() {
+  OR(L);
+}
+void CPU::Opcode0xB6() {
+  OR(mmu->ReadMemory(HL.GetRegister()));
+}
+void CPU::Opcode0xB7() {
+  OR(A);
+}
+void CPU::Opcode0xB8() {
+  CP(B);
+}
+void CPU::Opcode0xB9() {
+  CP(C);
+}
+void CPU::Opcode0xBA() {
+  CP(D);
+}
+void CPU::Opcode0xBB() {
+  CP(E);
+}
+void CPU::Opcode0xBC() {
+  CP(H);
+}
+void CPU::Opcode0xBD() {
+  CP(L);
+}
+void CPU::Opcode0xBE() {
+  CP(mmu->ReadMemory(HL.GetRegister()));
+}
+void CPU::Opcode0xBF() {
+  CP(A);
+}
+void CPU::Opcode0xC0() {
+  if (!GetBit(F, FLAG_Z)) {
+    POP_STACK16();
+  }
+}
+void CPU::Opcode0xC1() {
+  POP_STACK(BC);
+}
 void CPU::Opcode0xC2() {
-  if(!GetBit(F, FLAG_Z)) {
+  if (!GetBit(F, FLAG_Z)) {
     JP();
   } else {
     PC++;
     PC++;
   }
 }
-void CPU::Opcode0xC3() {JP();}
+void CPU::Opcode0xC3() {
+  JP();
+}
 void CPU::Opcode0xC4() {
-  if(!GetBit(F, FLAG_Z)) {
+  if (!GetBit(F, FLAG_Z)) {
     CALL();
   } else {
     PC++;
     PC++;
   }
 }
-void CPU::Opcode0xC5() {PUSH_STACK(BC);}
+void CPU::Opcode0xC5() {
+  PUSH_STACK(BC);
+}
 void CPU::Opcode0xC6() {
   ADD(mmu->ReadMemory(PC));
   PC++;
@@ -1338,29 +1442,34 @@ void CPU::Opcode0xC7() {
   RST(0);
 }
 void CPU::Opcode0xC8() {
-  if(GetBit(F, FLAG_Z)) {
+  if (GetBit(F, FLAG_Z)) {
     RET();
   }
 }
-void CPU::Opcode0xC9() {RET();}
+void CPU::Opcode0xC9() {
+  RET();
+}
 void CPU::Opcode0xCA() {
-  if(GetBit(F, FLAG_Z)) {
+  if (GetBit(F, FLAG_Z)) {
     JP();
   } else {
     PC++;
     PC++;
   }
 }
-void CPU::Opcode0xCB() { /* cb-prefix inst*/ }
+void CPU::Opcode0xCB() {
+  /* cb-prefix inst*/ }
 void CPU::Opcode0xCC() {
-  if(GetBit(F, FLAG_Z)) {
+  if (GetBit(F, FLAG_Z)) {
     CALL();
   } else {
     PC++;
     PC++;
   }
 }
-void CPU::Opcode0xCD() {CALL();}
+void CPU::Opcode0xCD() {
+  CALL();
+}
 void CPU::Opcode0xCE() {
   ADC(mmu->ReadMemory(PC));
   PC++;
@@ -1369,13 +1478,15 @@ void CPU::Opcode0xCF() {
   RST(1);
 }
 void CPU::Opcode0xD0() {
-  if(!GetBit(F, FLAG_C)) {
+  if (!GetBit(F, FLAG_C)) {
     RET();
   }
 }
-void CPU::Opcode0xD1() {POP_STACK(DE);}
+void CPU::Opcode0xD1() {
+  POP_STACK(DE);
+}
 void CPU::Opcode0xD2() {
-  if(!GetBit(F, FLAG_C)) {
+  if (!GetBit(F, FLAG_C)) {
     JP();
   } else {
     PC++;
@@ -1384,14 +1495,16 @@ void CPU::Opcode0xD2() {
 }
 void CPU::Opcode0xD3() {}
 void CPU::Opcode0xD4() {
-  if(!GetBit(F, FLAG_C)) {
+  if (!GetBit(F, FLAG_C)) {
     CALL();
   } else {
     PC++;
     PC++;
   }
 }
-void CPU::Opcode0xD5() {POP_STACK(DE);}
+void CPU::Opcode0xD5() {
+  POP_STACK(DE);
+}
 void CPU::Opcode0xD6() {
   SUB(mmu->ReadMemory(PC));
   PC++;
@@ -1400,17 +1513,17 @@ void CPU::Opcode0xD7() {
   RST(2);
 }
 void CPU::Opcode0xD8() {
-  if(GetBit(F, FLAG_C)) {
+  if (GetBit(F, FLAG_C)) {
     RET();
-  } 
+  }
 }
 
-void CPU::Opcode0xD9() { 
-  RET(); 
+void CPU::Opcode0xD9() {
+  RET();
   interruptsEnabled = !interruptsEnabled;
 }
 void CPU::Opcode0xDA() {
-  if(GetBit(F, FLAG_C)) {
+  if (GetBit(F, FLAG_C)) {
     JP();
   } else {
     PC++;
@@ -1419,7 +1532,7 @@ void CPU::Opcode0xDA() {
 }
 void CPU::Opcode0xDB() {}
 void CPU::Opcode0xDC() {
-  if(GetBit(F, FLAG_C)) {
+  if (GetBit(F, FLAG_C)) {
     CALL();
   } else {
     PC++;
@@ -1436,14 +1549,14 @@ void CPU::Opcode0xDF() {
 }
 
 void CPU::Opcode0xE0() {
-  LD(static_cast<uint16_t>(0xFF00 + mmu->ReadMemory(PC)), A);
+  LD(static_cast < uint16_t > (0xFF00 + mmu->ReadMemory(PC)), A);
   PC++;
 }
 void CPU::Opcode0xE1() {
   POP_STACK(HL);
 }
 void CPU::Opcode0xE2() {
-  LD(static_cast<uint16_t>(0xFF00 + C), A);
+  LD(static_cast < uint16_t > (0xFF00 + C), A);
 }
 void CPU::Opcode0xE3() {}
 void CPU::Opcode0xE4() {}
@@ -1464,7 +1577,7 @@ void CPU::Opcode0xE9() {
   JP_HL();
 }
 void CPU::Opcode0xEA() {
-  mmu->SetMemory(FormWord(mmu->ReadMemory(PC), mmu->ReadMemory(PC + 1)), A);
+  mmu -> SetMemory(FormWord(mmu->ReadMemory(PC), mmu->ReadMemory(PC + 1)), A);
   PC += 2;
 }
 void CPU::Opcode0xEB() {}
@@ -1478,14 +1591,14 @@ void CPU::Opcode0xEF() {
   RST(7);
 }
 void CPU::Opcode0xF0() {
-  LD(A, static_cast<uint16_t>(0xFF00 + mmu->ReadMemory(PC)));
+  LD(A, static_cast < uint16_t > (0xFF00 + mmu->ReadMemory(PC)));
   PC++;
 }
 void CPU::Opcode0xF1() {
   POP_STACK(AF);
 }
 void CPU::Opcode0xF2() {
-  LD(A, static_cast<uint16_t>(0xFF00 + C));
+  LD(A, static_cast < uint16_t > (0xFF00 + C));
 }
 void CPU::Opcode0xF3() {
   interruptsEnabled = false;
@@ -1502,7 +1615,7 @@ void CPU::Opcode0xF7() {
   RST(6);
 }
 void CPU::Opcode0xF8() {
-  int16_t data = SP + mmu->ReadMemory(PC);; 
+  int16_t data = SP + mmu->ReadMemory(PC);;
   ClearBit(F, FLAG_Z);
   ClearBit(F, FLAG_N);
   data > 0x0FFF ? SetBit(F, FLAG_H) : ClearBit(F, FLAG_H);
