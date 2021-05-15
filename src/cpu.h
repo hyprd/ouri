@@ -48,6 +48,7 @@ class CPU {
         void PUSH_STACK(Register &reg);
         void PUSH_STACK16(uint16_t value);
         void POP_STACK(Register &reg);
+        void POP_STACK16();
         uint16_t READ_STACK();
 
         void LD(uint8_t &reg1, uint8_t reg2);
@@ -74,6 +75,7 @@ class CPU {
         void CALL();
         void JR();
         void JP();
+        void JP_HL();
         void RL(uint8_t &reg, bool isA);
         void RLC(uint8_t &reg, bool isA);
         void RR(uint8_t &reg, bool isA);
