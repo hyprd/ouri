@@ -480,16 +480,14 @@ void CPU::CALL() {
 }
 
 void CPU::JR() {
-  int8_t steps = static_cast<int8_t>(mmu->ReadMemory(PC));
-  PC++;
-  PC += steps;
+  PC = PC + 1 + (static_cast<int8_t>(mmu->ReadMemory(PC + 1)));
 }
 
 void CPU::JP() {
-  uint8_t low = mmu->ReadMemory(PC);
+  uint16_t low = mmu->ReadMemory(PC + 1);
   PC++;
-  uint8_t high = mmu->ReadMemory(PC);
-  PC = FormWord(high, low);
+  uint16_t high = mmu->ReadMemory(PC + 1) << 8;
+  PC = (low | high) - 1;
 }
 
 void CPU::JP_HL() {
