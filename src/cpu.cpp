@@ -33,6 +33,42 @@ CPU::CPU(MMU* _mmu) {
 void CPU::Initialise() {
     std::cout << "\n[INFO] Initialising CPU..." << std::endl;
     PC = 0x0100;
+    AF.SetRegister(0x01B0);
+    BC.SetRegister(0x0013);
+    DE.SetRegister(0x00D8);
+    HL.SetRegister(0x014D);
+    mmu->SetMemory(0xFF05, 0x00);
+    mmu->SetMemory(0xFF06, 0x00);
+    mmu->SetMemory(0xFF07, 0x00);
+    mmu->SetMemory(0xFF10, 0x80);
+    mmu->SetMemory(0xFF11, 0xBF);
+    mmu->SetMemory(0xFF12, 0xF3);
+    mmu->SetMemory(0xFF14, 0xBF);
+    mmu->SetMemory(0xFF16, 0x3F);
+    mmu->SetMemory(0xFF17, 0x00);
+    mmu->SetMemory(0xFF19, 0xBF);
+    mmu->SetMemory(0xFF1A, 0x7F);
+    mmu->SetMemory(0xFF1B, 0xFF);
+    mmu->SetMemory(0xFF1C, 0x9F);
+    mmu->SetMemory(0xFF1E, 0xBF);
+    mmu->SetMemory(0xFF20, 0xFF);
+    mmu->SetMemory(0xFF21, 0x00);
+    mmu->SetMemory(0xFF22, 0x00);
+    mmu->SetMemory(0xFF23, 0xBF);
+    mmu->SetMemory(0xFF24, 0x77);
+    mmu->SetMemory(0xFF25, 0xF3);
+    mmu->SetMemory(0xFF26, 0xF1);
+    mmu->SetMemory(0xFF40, 0x91);
+    mmu->SetMemory(0xFF42, 0x00);
+    mmu->SetMemory(0xFF43, 0x00);
+    mmu->SetMemory(0xFF45, 0x00);
+    mmu->SetMemory(0xFF47, 0xFC);
+    mmu->SetMemory(0xFF48, 0xFF);
+    mmu->SetMemory(0xFF49, 0xFF);
+    mmu->SetMemory(0xFF4A, 0x00);
+    mmu->SetMemory(0xFF4B, 0x00);
+    mmu->SetMemory(0xFFFF, 0x00);
+
     SP = 0xFFFE;
     std::cout << "[INFO] Done." << std::endl;
 }
@@ -43,7 +79,6 @@ void CPU::Cycle() {
 
 void CPU::Execute(uint8_t instruction) {
     DebugInstruction(instruction);
-    DebugRegisters();
     (this->*Opcodes[instruction])();
     PC++;
 }
