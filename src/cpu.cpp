@@ -38,12 +38,12 @@ void CPU::Initialise() {
 }
 
 void CPU::Cycle() {
-    std::cout << "PC: " << std::hex<< +PC << "\t";
     Execute(mmu->ReadMemory(PC));
 }
 
 void CPU::Execute(uint8_t instruction) {
-    std::cout << "Instruction: 0x" << std::hex << std::uppercase << +instruction << std::endl;
+    DebugInstruction(instruction);
+    DebugRegisters();
     (this->*Opcodes[instruction])();
     PC++;
 }
