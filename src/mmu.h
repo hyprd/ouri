@@ -6,8 +6,8 @@ class MMU {
         MMU();
         uint8_t Memory[GB_MEMORY_MAX];
         uint32_t sizeROM = 0;
-
-        void LoadROM(MMU* mmu, char *Filename);
+        
+        void LoadROM(MMU* mmu, std::string filename);
         void DumpMemory(MMU* mmu);
         
         uint8_t ReadMemory(uint16_t Address);

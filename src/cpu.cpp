@@ -68,7 +68,6 @@ void CPU::Initialise() {
     mmu->SetMemory(0xFF4A, 0x00);
     mmu->SetMemory(0xFF4B, 0x00);
     mmu->SetMemory(0xFFFF, 0x00);
-
     SP = 0xFFFE;
     std::cout << "[INFO] Done." << std::endl;
 }
@@ -79,6 +78,7 @@ void CPU::Cycle() {
 
 void CPU::Execute(uint8_t instruction) {
     DebugInstruction(instruction);
+    std::cout << "PC: " << PC << "\t";
     (this->*Opcodes[instruction])();
     PC++;
 }

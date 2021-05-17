@@ -1,5 +1,4 @@
 #include "opcodes.h"
-
 #include "helpers.h"
 
 void CPU::PopulateOpcodes() {
@@ -1639,6 +1638,7 @@ void CPU::Opcode0xFE() {
   CP(mmu->ReadMemory(PC));
   PC++;
 }
+
 void CPU::Opcode0xFF() {
   RST(7);
 }
