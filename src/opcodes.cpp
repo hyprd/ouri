@@ -263,6 +263,46 @@ void CPU::PopulateOpcodes() {
 }
 
 /* --------------------------------------------------------------------*/
+/* ----------------------------  INTERRUPTS  --------------------------*/
+/* --------------------------------------------------------------------*/
+
+void CPU::HandleInterrupts() {
+  if(IME) {
+    interruptEnables = std::bitset<8>(mmu->ReadMemory(0xFFFF));
+    interruptFlags = std::bitset<8>(mmu->ReadMemory(0xFF0F)); 
+    if(interruptFlags.any()) {
+      for(int i = 0 ; i < 5; i++) {
+        // If interrupts are enabled for the bit and the request was made
+        if(interruptEnables.test(i) && interruptFlags.test(i)) {
+          ExecuteInterrupt(i);
+        }
+      }
+    }
+  }
+}
+
+void CPU::SetInterrupt(uint8_t interrupt) {
+  interruptFlags.set(interrupt);
+  mmu->SetMemory(0xFF0F, static_cast<uint8_t>(interruptFlags.to_ulong()));
+  halted = false;
+}
+
+void CPU::ExecuteInterrupt(uint8_t interrupt) {
+  // Acknowledge by resetting the interrupt request bit + IME
+  interruptFlags.reset(interrupt);
+  IME = false;
+  // Call the interrupt vector 
+  mmu->SetMemory(0xFF0F, static_cast<uint8_t>(interruptFlags.to_ulong()));
+  PUSH_STACK16(PC);
+  // Bit 0: VBlank    0x40
+  // Bit 1: LCD STAT  0x48
+  // Bit 2: Timer     0x50
+  // Bit 3: Serial    0x58 
+  // Bit 4: Joypad    0x60
+  PC = InterruptVectors[interrupt];
+}
+
+/* --------------------------------------------------------------------*/
 /* ------------------------------   BITS  -----------------------------*/
 /* --------------------------------------------------------------------*/
 void CPU::SetBit(uint8_t &byte, uint8_t bit) {
@@ -577,11 +617,11 @@ void CPU::SET(uint8_t &reg, uint8_t bit) {
 }
 
 void CPU::DI() {
-  interruptsEnabled = false;
+  IME = false;
 }
 
 void CPU::EI() {
-  interruptsEnabled = true;
+  IME = true;
 }
 
 void CPU::STOP() {
@@ -1519,7 +1559,7 @@ void CPU::Opcode0xD8() {
 
 void CPU::Opcode0xD9() {
   RET();
-  interruptsEnabled = !interruptsEnabled;
+  IME = true;
 }
 void CPU::Opcode0xDA() {
   if (GetBit(F, FLAG_C)) {
@@ -1600,7 +1640,7 @@ void CPU::Opcode0xF2() {
   LD(A, static_cast <uint16_t> (0xFF00 + C));
 }
 void CPU::Opcode0xF3() {
-  interruptsEnabled = false;
+  IME = false;
 }
 void CPU::Opcode0xF4() {}
 void CPU::Opcode0xF5() {
@@ -1630,7 +1670,7 @@ void CPU::Opcode0xFA() {
   PC += 2;
 }
 void CPU::Opcode0xFB() {
-  interruptsEnabled = true;
+  IME = true;
 }
 void CPU::Opcode0xFC() {}
 void CPU::Opcode0xFD() {}
