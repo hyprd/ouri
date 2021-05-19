@@ -28,6 +28,7 @@ CPU::CPU(MMU* _mmu) {
 
     Initialise();
     PopulateOpcodes();
+    PopulateExtendedOpcodes();
 } 
 
 void CPU::Initialise() {
@@ -79,7 +80,12 @@ void CPU::Cycle() {
 void CPU::Execute(uint8_t instruction) {
     DebugInstruction(instruction);
     std::cout << "PC: " << PC << "\t";
-    (this->*Opcodes[instruction])();
+    if(!extended) {
+        (this->*Opcodes[instruction])();
+    } else {
+        (this->*ExtendedOpcodes[instruction])();
+        extended = false;
+    }
     if(!halted) PC++;
     HandleInterrupts();
 }

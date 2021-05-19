@@ -46,6 +46,7 @@ class CPU {
         bool IME = false;
         bool stopped = false;
         bool halted = false;
+        bool extended = false;
 
         std::bitset<8> interruptEnables;
         std::bitset<8> interruptFlags;
