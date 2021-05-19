@@ -2,15 +2,16 @@
 
 MMU::MMU(){}
 
-void MMU::LoadROM(MMU* mmu, char *Filename) {
+void MMU::LoadROM(MMU* mmu, std::string filename) {
+    const char* fname = filename.c_str();
     std::cout << "[INFO] Loading cartridge..." << std::endl;
-    FILE* f = fopen(Filename, "rb");
+    FILE* f = fopen(fname, "rb");
     fseek(f, 0, SEEK_END);
     sizeROM = ftell(f);
     rewind(f);
     fread(mmu->Memory, 1, sizeROM, f);
     fclose(f);
-    std::cout << "[INFO] Loaded cartridge " << Filename << ", Size: " << sizeROM << " bytes.";
+    std::cout << "[INFO] Loaded cartridge " << fname << ", Size: " << sizeROM << " bytes.";
 }
 
 void MMU::DumpMemory(MMU* mmu) {

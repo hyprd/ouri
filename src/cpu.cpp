@@ -80,5 +80,6 @@ void CPU::Execute(uint8_t instruction) {
     DebugInstruction(instruction);
     std::cout << "PC: " << PC << "\t";
     (this->*Opcodes[instruction])();
-    PC++;
+    if(!halted) PC++;
+    HandleInterrupts();
 }

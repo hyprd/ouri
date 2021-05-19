@@ -262,6 +262,267 @@ void CPU::PopulateOpcodes() {
   std::cout << "[INFO] Done." << std::endl;
 }
 
+void CPU::PopulateExtendedOpcodes() {
+  std::cout << "[INFO] Populating opcodes..." << std::endl;
+  ExtendedOpcodes[0x00] = &CPU::ExtendedOpcode0x00;
+  ExtendedOpcodes[0x01] = &CPU::ExtendedOpcode0x01;
+  ExtendedOpcodes[0x02] = &CPU::ExtendedOpcode0x02;
+  ExtendedOpcodes[0x03] = &CPU::ExtendedOpcode0x03;
+  ExtendedOpcodes[0x04] = &CPU::ExtendedOpcode0x04;
+  ExtendedOpcodes[0x05] = &CPU::ExtendedOpcode0x05;
+  ExtendedOpcodes[0x06] = &CPU::ExtendedOpcode0x06;
+  ExtendedOpcodes[0x07] = &CPU::ExtendedOpcode0x07;
+  ExtendedOpcodes[0x08] = &CPU::ExtendedOpcode0x08;
+  ExtendedOpcodes[0x09] = &CPU::ExtendedOpcode0x09;
+  ExtendedOpcodes[0x0A] = &CPU::ExtendedOpcode0x0A;
+  ExtendedOpcodes[0x0B] = &CPU::ExtendedOpcode0x0B;
+  ExtendedOpcodes[0x0C] = &CPU::ExtendedOpcode0x0C;
+  ExtendedOpcodes[0x0D] = &CPU::ExtendedOpcode0x0D;
+  ExtendedOpcodes[0x0E] = &CPU::ExtendedOpcode0x0E;
+  ExtendedOpcodes[0x0F] = &CPU::ExtendedOpcode0x0F;
+  ExtendedOpcodes[0x10] = &CPU::ExtendedOpcode0x10;
+  ExtendedOpcodes[0x11] = &CPU::ExtendedOpcode0x11;
+  ExtendedOpcodes[0x12] = &CPU::ExtendedOpcode0x12;
+  ExtendedOpcodes[0x13] = &CPU::ExtendedOpcode0x13;
+  ExtendedOpcodes[0x14] = &CPU::ExtendedOpcode0x14;
+  ExtendedOpcodes[0x15] = &CPU::ExtendedOpcode0x15;
+  ExtendedOpcodes[0x16] = &CPU::ExtendedOpcode0x16;
+  ExtendedOpcodes[0x17] = &CPU::ExtendedOpcode0x17;
+  ExtendedOpcodes[0x18] = &CPU::ExtendedOpcode0x18;
+  ExtendedOpcodes[0x19] = &CPU::ExtendedOpcode0x19;
+  ExtendedOpcodes[0x1A] = &CPU::ExtendedOpcode0x1A;
+  ExtendedOpcodes[0x1B] = &CPU::ExtendedOpcode0x1B;
+  ExtendedOpcodes[0x1C] = &CPU::ExtendedOpcode0x1C;
+  ExtendedOpcodes[0x1D] = &CPU::ExtendedOpcode0x1D;
+  ExtendedOpcodes[0x1E] = &CPU::ExtendedOpcode0x1E;
+  ExtendedOpcodes[0x1F] = &CPU::ExtendedOpcode0x1F;
+  ExtendedOpcodes[0x20] = &CPU::ExtendedOpcode0x20;
+  ExtendedOpcodes[0x21] = &CPU::ExtendedOpcode0x21;
+  ExtendedOpcodes[0x22] = &CPU::ExtendedOpcode0x22;
+  ExtendedOpcodes[0x23] = &CPU::ExtendedOpcode0x23;
+  ExtendedOpcodes[0x24] = &CPU::ExtendedOpcode0x24;
+  ExtendedOpcodes[0x25] = &CPU::ExtendedOpcode0x25;
+  ExtendedOpcodes[0x26] = &CPU::ExtendedOpcode0x26;
+  ExtendedOpcodes[0x27] = &CPU::ExtendedOpcode0x27;
+  ExtendedOpcodes[0x28] = &CPU::ExtendedOpcode0x28;
+  ExtendedOpcodes[0x29] = &CPU::ExtendedOpcode0x29;
+  ExtendedOpcodes[0x2A] = &CPU::ExtendedOpcode0x2A;
+  ExtendedOpcodes[0x2B] = &CPU::ExtendedOpcode0x2B;
+  ExtendedOpcodes[0x2C] = &CPU::ExtendedOpcode0x2C;
+  ExtendedOpcodes[0x2D] = &CPU::ExtendedOpcode0x2D;
+  ExtendedOpcodes[0x2E] = &CPU::ExtendedOpcode0x2E;
+  ExtendedOpcodes[0x2F] = &CPU::ExtendedOpcode0x2F;
+  ExtendedOpcodes[0x30] = &CPU::ExtendedOpcode0x30;
+  ExtendedOpcodes[0x31] = &CPU::ExtendedOpcode0x31;
+  ExtendedOpcodes[0x32] = &CPU::ExtendedOpcode0x32;
+  ExtendedOpcodes[0x33] = &CPU::ExtendedOpcode0x33;
+  ExtendedOpcodes[0x34] = &CPU::ExtendedOpcode0x34;
+  ExtendedOpcodes[0x35] = &CPU::ExtendedOpcode0x35;
+  ExtendedOpcodes[0x36] = &CPU::ExtendedOpcode0x36;
+  ExtendedOpcodes[0x37] = &CPU::ExtendedOpcode0x37;
+  ExtendedOpcodes[0x38] = &CPU::ExtendedOpcode0x38;
+  ExtendedOpcodes[0x39] = &CPU::ExtendedOpcode0x39;
+  ExtendedOpcodes[0x3A] = &CPU::ExtendedOpcode0x3A;
+  ExtendedOpcodes[0x3B] = &CPU::ExtendedOpcode0x3B;
+  ExtendedOpcodes[0x3C] = &CPU::ExtendedOpcode0x3C;
+  ExtendedOpcodes[0x3D] = &CPU::ExtendedOpcode0x3D;
+  ExtendedOpcodes[0x3E] = &CPU::ExtendedOpcode0x3E;
+  ExtendedOpcodes[0x3F] = &CPU::ExtendedOpcode0x3F;
+  ExtendedOpcodes[0x40] = &CPU::ExtendedOpcode0x40;
+  ExtendedOpcodes[0x41] = &CPU::ExtendedOpcode0x41;
+  ExtendedOpcodes[0x42] = &CPU::ExtendedOpcode0x42;
+  ExtendedOpcodes[0x43] = &CPU::ExtendedOpcode0x43;
+  ExtendedOpcodes[0x44] = &CPU::ExtendedOpcode0x44;
+  ExtendedOpcodes[0x45] = &CPU::ExtendedOpcode0x45;
+  ExtendedOpcodes[0x46] = &CPU::ExtendedOpcode0x46;
+  ExtendedOpcodes[0x47] = &CPU::ExtendedOpcode0x47;
+  ExtendedOpcodes[0x48] = &CPU::ExtendedOpcode0x48;
+  ExtendedOpcodes[0x49] = &CPU::ExtendedOpcode0x49;
+  ExtendedOpcodes[0x4A] = &CPU::ExtendedOpcode0x4A;
+  ExtendedOpcodes[0x4B] = &CPU::ExtendedOpcode0x4B;
+  ExtendedOpcodes[0x4C] = &CPU::ExtendedOpcode0x4C;
+  ExtendedOpcodes[0x4D] = &CPU::ExtendedOpcode0x4D;
+  ExtendedOpcodes[0x4E] = &CPU::ExtendedOpcode0x4E;
+  ExtendedOpcodes[0x4F] = &CPU::ExtendedOpcode0x4F;
+  ExtendedOpcodes[0x50] = &CPU::ExtendedOpcode0x50;
+  ExtendedOpcodes[0x51] = &CPU::ExtendedOpcode0x51;
+  ExtendedOpcodes[0x52] = &CPU::ExtendedOpcode0x52;
+  ExtendedOpcodes[0x53] = &CPU::ExtendedOpcode0x53;
+  ExtendedOpcodes[0x54] = &CPU::ExtendedOpcode0x54;
+  ExtendedOpcodes[0x55] = &CPU::ExtendedOpcode0x55;
+  ExtendedOpcodes[0x56] = &CPU::ExtendedOpcode0x56;
+  ExtendedOpcodes[0x57] = &CPU::ExtendedOpcode0x57;
+  ExtendedOpcodes[0x58] = &CPU::ExtendedOpcode0x58;
+  ExtendedOpcodes[0x59] = &CPU::ExtendedOpcode0x59;
+  ExtendedOpcodes[0x5A] = &CPU::ExtendedOpcode0x5A;
+  ExtendedOpcodes[0x5B] = &CPU::ExtendedOpcode0x5B;
+  ExtendedOpcodes[0x5C] = &CPU::ExtendedOpcode0x5C;
+  ExtendedOpcodes[0x5D] = &CPU::ExtendedOpcode0x5D;
+  ExtendedOpcodes[0x5E] = &CPU::ExtendedOpcode0x5E;
+  ExtendedOpcodes[0x5F] = &CPU::ExtendedOpcode0x5F;
+  ExtendedOpcodes[0x60] = &CPU::ExtendedOpcode0x60;
+  ExtendedOpcodes[0x61] = &CPU::ExtendedOpcode0x61;
+  ExtendedOpcodes[0x62] = &CPU::ExtendedOpcode0x62;
+  ExtendedOpcodes[0x63] = &CPU::ExtendedOpcode0x63;
+  ExtendedOpcodes[0x64] = &CPU::ExtendedOpcode0x64;
+  ExtendedOpcodes[0x65] = &CPU::ExtendedOpcode0x65;
+  ExtendedOpcodes[0x66] = &CPU::ExtendedOpcode0x66;
+  ExtendedOpcodes[0x67] = &CPU::ExtendedOpcode0x67;
+  ExtendedOpcodes[0x68] = &CPU::ExtendedOpcode0x68;
+  ExtendedOpcodes[0x69] = &CPU::ExtendedOpcode0x69;
+  ExtendedOpcodes[0x6A] = &CPU::ExtendedOpcode0x6A;
+  ExtendedOpcodes[0x6B] = &CPU::ExtendedOpcode0x6B;
+  ExtendedOpcodes[0x6C] = &CPU::ExtendedOpcode0x6C;
+  ExtendedOpcodes[0x6D] = &CPU::ExtendedOpcode0x6D;
+  ExtendedOpcodes[0x6E] = &CPU::ExtendedOpcode0x6E;
+  ExtendedOpcodes[0x6F] = &CPU::ExtendedOpcode0x6F;
+  ExtendedOpcodes[0x70] = &CPU::ExtendedOpcode0x70;
+  ExtendedOpcodes[0x71] = &CPU::ExtendedOpcode0x71;
+  ExtendedOpcodes[0x72] = &CPU::ExtendedOpcode0x72;
+  ExtendedOpcodes[0x73] = &CPU::ExtendedOpcode0x73;
+  ExtendedOpcodes[0x74] = &CPU::ExtendedOpcode0x74;
+  ExtendedOpcodes[0x75] = &CPU::ExtendedOpcode0x75;
+  ExtendedOpcodes[0x76] = &CPU::ExtendedOpcode0x76;
+  ExtendedOpcodes[0x77] = &CPU::ExtendedOpcode0x77;
+  ExtendedOpcodes[0x78] = &CPU::ExtendedOpcode0x78;
+  ExtendedOpcodes[0x79] = &CPU::ExtendedOpcode0x79;
+  ExtendedOpcodes[0x7A] = &CPU::ExtendedOpcode0x7A;
+  ExtendedOpcodes[0x7B] = &CPU::ExtendedOpcode0x7B;
+  ExtendedOpcodes[0x7C] = &CPU::ExtendedOpcode0x7C;
+  ExtendedOpcodes[0x7D] = &CPU::ExtendedOpcode0x7D;
+  ExtendedOpcodes[0x7E] = &CPU::ExtendedOpcode0x7E;
+  ExtendedOpcodes[0x7F] = &CPU::ExtendedOpcode0x7F;
+  ExtendedOpcodes[0x80] = &CPU::ExtendedOpcode0x80;
+  ExtendedOpcodes[0x81] = &CPU::ExtendedOpcode0x81;
+  ExtendedOpcodes[0x82] = &CPU::ExtendedOpcode0x82;
+  ExtendedOpcodes[0x83] = &CPU::ExtendedOpcode0x83;
+  ExtendedOpcodes[0x84] = &CPU::ExtendedOpcode0x84;
+  ExtendedOpcodes[0x85] = &CPU::ExtendedOpcode0x85;
+  ExtendedOpcodes[0x86] = &CPU::ExtendedOpcode0x86;
+  ExtendedOpcodes[0x87] = &CPU::ExtendedOpcode0x87;
+  ExtendedOpcodes[0x88] = &CPU::ExtendedOpcode0x88;
+  ExtendedOpcodes[0x89] = &CPU::ExtendedOpcode0x89;
+  ExtendedOpcodes[0x8A] = &CPU::ExtendedOpcode0x8A;
+  ExtendedOpcodes[0x8B] = &CPU::ExtendedOpcode0x8B;
+  ExtendedOpcodes[0x8C] = &CPU::ExtendedOpcode0x8C;
+  ExtendedOpcodes[0x8D] = &CPU::ExtendedOpcode0x8D;
+  ExtendedOpcodes[0x8E] = &CPU::ExtendedOpcode0x8E;
+  ExtendedOpcodes[0x8F] = &CPU::ExtendedOpcode0x8F;
+  ExtendedOpcodes[0x90] = &CPU::ExtendedOpcode0x90;
+  ExtendedOpcodes[0x91] = &CPU::ExtendedOpcode0x91;
+  ExtendedOpcodes[0x92] = &CPU::ExtendedOpcode0x92;
+  ExtendedOpcodes[0x93] = &CPU::ExtendedOpcode0x93;
+  ExtendedOpcodes[0x94] = &CPU::ExtendedOpcode0x94;
+  ExtendedOpcodes[0x95] = &CPU::ExtendedOpcode0x95;
+  ExtendedOpcodes[0x96] = &CPU::ExtendedOpcode0x96;
+  ExtendedOpcodes[0x97] = &CPU::ExtendedOpcode0x97;
+  ExtendedOpcodes[0x98] = &CPU::ExtendedOpcode0x98;
+  ExtendedOpcodes[0x99] = &CPU::ExtendedOpcode0x99;
+  ExtendedOpcodes[0x9A] = &CPU::ExtendedOpcode0x9A;
+  ExtendedOpcodes[0x9B] = &CPU::ExtendedOpcode0x9B;
+  ExtendedOpcodes[0x9C] = &CPU::ExtendedOpcode0x9C;
+  ExtendedOpcodes[0x9D] = &CPU::ExtendedOpcode0x9D;
+  ExtendedOpcodes[0x9E] = &CPU::ExtendedOpcode0x9E;
+  ExtendedOpcodes[0x9F] = &CPU::ExtendedOpcode0x9F;
+  ExtendedOpcodes[0xA0] = &CPU::ExtendedOpcode0xA0;
+  ExtendedOpcodes[0xA1] = &CPU::ExtendedOpcode0xA1;
+  ExtendedOpcodes[0xA2] = &CPU::ExtendedOpcode0xA2;
+  ExtendedOpcodes[0xA3] = &CPU::ExtendedOpcode0xA3;
+  ExtendedOpcodes[0xA4] = &CPU::ExtendedOpcode0xA4;
+  ExtendedOpcodes[0xA5] = &CPU::ExtendedOpcode0xA5;
+  ExtendedOpcodes[0xA6] = &CPU::ExtendedOpcode0xA6;
+  ExtendedOpcodes[0xA7] = &CPU::ExtendedOpcode0xA7;
+  ExtendedOpcodes[0xA8] = &CPU::ExtendedOpcode0xA8;
+  ExtendedOpcodes[0xA9] = &CPU::ExtendedOpcode0xA9;
+  ExtendedOpcodes[0xAA] = &CPU::ExtendedOpcode0xAA;
+  ExtendedOpcodes[0xAB] = &CPU::ExtendedOpcode0xAB;
+  ExtendedOpcodes[0xAC] = &CPU::ExtendedOpcode0xAC;
+  ExtendedOpcodes[0xAD] = &CPU::ExtendedOpcode0xAD;
+  ExtendedOpcodes[0xAE] = &CPU::ExtendedOpcode0xAE;
+  ExtendedOpcodes[0xAF] = &CPU::ExtendedOpcode0xAF;
+  ExtendedOpcodes[0xB0] = &CPU::ExtendedOpcode0xB0;
+  ExtendedOpcodes[0xB1] = &CPU::ExtendedOpcode0xB1;
+  ExtendedOpcodes[0xB2] = &CPU::ExtendedOpcode0xB2;
+  ExtendedOpcodes[0xB3] = &CPU::ExtendedOpcode0xB3;
+  ExtendedOpcodes[0xB4] = &CPU::ExtendedOpcode0xB4;
+  ExtendedOpcodes[0xB5] = &CPU::ExtendedOpcode0xB5;
+  ExtendedOpcodes[0xB6] = &CPU::ExtendedOpcode0xB6;
+  ExtendedOpcodes[0xB7] = &CPU::ExtendedOpcode0xB7;
+  ExtendedOpcodes[0xB8] = &CPU::ExtendedOpcode0xB8;
+  ExtendedOpcodes[0xB9] = &CPU::ExtendedOpcode0xB9;
+  ExtendedOpcodes[0xBA] = &CPU::ExtendedOpcode0xBA;
+  ExtendedOpcodes[0xBB] = &CPU::ExtendedOpcode0xBB;
+  ExtendedOpcodes[0xBC] = &CPU::ExtendedOpcode0xBC;
+  ExtendedOpcodes[0xBD] = &CPU::ExtendedOpcode0xBD;
+  ExtendedOpcodes[0xBE] = &CPU::ExtendedOpcode0xBE;
+  ExtendedOpcodes[0xBF] = &CPU::ExtendedOpcode0xBF;
+  ExtendedOpcodes[0xC0] = &CPU::ExtendedOpcode0xC0;
+  ExtendedOpcodes[0xC1] = &CPU::ExtendedOpcode0xC1;
+  ExtendedOpcodes[0xC2] = &CPU::ExtendedOpcode0xC2;
+  ExtendedOpcodes[0xC3] = &CPU::ExtendedOpcode0xC3;
+  ExtendedOpcodes[0xC4] = &CPU::ExtendedOpcode0xC4;
+  ExtendedOpcodes[0xC5] = &CPU::ExtendedOpcode0xC5;
+  ExtendedOpcodes[0xC6] = &CPU::ExtendedOpcode0xC6;
+  ExtendedOpcodes[0xC7] = &CPU::ExtendedOpcode0xC7;
+  ExtendedOpcodes[0xC8] = &CPU::ExtendedOpcode0xC8;
+  ExtendedOpcodes[0xC9] = &CPU::ExtendedOpcode0xC9;
+  ExtendedOpcodes[0xCA] = &CPU::ExtendedOpcode0xCA;
+  ExtendedOpcodes[0xCB] = &CPU::ExtendedOpcode0xCB;
+  ExtendedOpcodes[0xCC] = &CPU::ExtendedOpcode0xCC;
+  ExtendedOpcodes[0xCD] = &CPU::ExtendedOpcode0xCD;
+  ExtendedOpcodes[0xCE] = &CPU::ExtendedOpcode0xCE;
+  ExtendedOpcodes[0xCF] = &CPU::ExtendedOpcode0xCF;
+  ExtendedOpcodes[0xD0] = &CPU::ExtendedOpcode0xD0;
+  ExtendedOpcodes[0xD1] = &CPU::ExtendedOpcode0xD1;
+  ExtendedOpcodes[0xD2] = &CPU::ExtendedOpcode0xD2;
+  ExtendedOpcodes[0xD3] = &CPU::ExtendedOpcode0xD3;
+  ExtendedOpcodes[0xD4] = &CPU::ExtendedOpcode0xD4;
+  ExtendedOpcodes[0xD5] = &CPU::ExtendedOpcode0xD5;
+  ExtendedOpcodes[0xD6] = &CPU::ExtendedOpcode0xD6;
+  ExtendedOpcodes[0xD7] = &CPU::ExtendedOpcode0xD7;
+  ExtendedOpcodes[0xD8] = &CPU::ExtendedOpcode0xD8;
+  ExtendedOpcodes[0xD9] = &CPU::ExtendedOpcode0xD9;
+  ExtendedOpcodes[0xDA] = &CPU::ExtendedOpcode0xDA;
+  ExtendedOpcodes[0xDB] = &CPU::ExtendedOpcode0xDB;
+  ExtendedOpcodes[0xDC] = &CPU::ExtendedOpcode0xDC;
+  ExtendedOpcodes[0xDD] = &CPU::ExtendedOpcode0xDD;
+  ExtendedOpcodes[0xDE] = &CPU::ExtendedOpcode0xDE;
+  ExtendedOpcodes[0xDF] = &CPU::ExtendedOpcode0xDF;
+  ExtendedOpcodes[0xE0] = &CPU::ExtendedOpcode0xE0;
+  ExtendedOpcodes[0xE1] = &CPU::ExtendedOpcode0xE1;
+  ExtendedOpcodes[0xE2] = &CPU::ExtendedOpcode0xE2;
+  ExtendedOpcodes[0xE3] = &CPU::ExtendedOpcode0xE3;
+  ExtendedOpcodes[0xE4] = &CPU::ExtendedOpcode0xE4;
+  ExtendedOpcodes[0xE5] = &CPU::ExtendedOpcode0xE5;
+  ExtendedOpcodes[0xE6] = &CPU::ExtendedOpcode0xE6;
+  ExtendedOpcodes[0xE7] = &CPU::ExtendedOpcode0xE7;
+  ExtendedOpcodes[0xE8] = &CPU::ExtendedOpcode0xE8;
+  ExtendedOpcodes[0xE9] = &CPU::ExtendedOpcode0xE9;
+  ExtendedOpcodes[0xEA] = &CPU::ExtendedOpcode0xEA;
+  ExtendedOpcodes[0xEB] = &CPU::ExtendedOpcode0xEB;
+  ExtendedOpcodes[0xEC] = &CPU::ExtendedOpcode0xEC;
+  ExtendedOpcodes[0xED] = &CPU::ExtendedOpcode0xED;
+  ExtendedOpcodes[0xEE] = &CPU::ExtendedOpcode0xEE;
+  ExtendedOpcodes[0xEF] = &CPU::ExtendedOpcode0xEF;
+  ExtendedOpcodes[0xF0] = &CPU::ExtendedOpcode0xF0;
+  ExtendedOpcodes[0xF1] = &CPU::ExtendedOpcode0xF1;
+  ExtendedOpcodes[0xF2] = &CPU::ExtendedOpcode0xF2;
+  ExtendedOpcodes[0xF3] = &CPU::ExtendedOpcode0xF3;
+  ExtendedOpcodes[0xF4] = &CPU::ExtendedOpcode0xF4;
+  ExtendedOpcodes[0xF5] = &CPU::ExtendedOpcode0xF5;
+  ExtendedOpcodes[0xF6] = &CPU::ExtendedOpcode0xF6;
+  ExtendedOpcodes[0xF7] = &CPU::ExtendedOpcode0xF7;
+  ExtendedOpcodes[0xF8] = &CPU::ExtendedOpcode0xF8;
+  ExtendedOpcodes[0xF9] = &CPU::ExtendedOpcode0xF9;
+  ExtendedOpcodes[0xFA] = &CPU::ExtendedOpcode0xFA;
+  ExtendedOpcodes[0xFB] = &CPU::ExtendedOpcode0xFB;
+  ExtendedOpcodes[0xFC] = &CPU::ExtendedOpcode0xFC;
+  ExtendedOpcodes[0xFD] = &CPU::ExtendedOpcode0xFD;
+  ExtendedOpcodes[0xFE] = &CPU::ExtendedOpcode0xFE;
+  ExtendedOpcodes[0xFF] = &CPU::ExtendedOpcode0xFF;
+  std::cout << "[INFO] Done." << std::endl;
+}
+
 /* --------------------------------------------------------------------*/
 /* ----------------------------  INTERRUPTS  --------------------------*/
 /* --------------------------------------------------------------------*/
@@ -1303,155 +1564,205 @@ void CPU::Opcode0x8F() {
 void CPU::Opcode0x90() {
   SUB(B);
 }
+
 void CPU::Opcode0x91() {
   SUB(C);
 }
+
 void CPU::Opcode0x92() {
   SUB(D);
 }
+
 void CPU::Opcode0x93() {
   SUB(E);
 }
+
 void CPU::Opcode0x94() {
   SUB(H);
 }
+
 void CPU::Opcode0x95() {
   SUB(L);
 }
+
 void CPU::Opcode0x96() {
   SUB(mmu->ReadMemory(HL.GetRegister()));
 }
+
 void CPU::Opcode0x97() {
   SUB(A);
 }
+
 void CPU::Opcode0x98() {
   SBC(B);
 }
+
 void CPU::Opcode0x99() {
   SBC(C);
 }
+
 void CPU::Opcode0x9A() {
   SBC(D);
 }
+
 void CPU::Opcode0x9B() {
   SBC(E);
 }
+
 void CPU::Opcode0x9C() {
   SBC(H);
 }
+
 void CPU::Opcode0x9D() {
   SBC(L);
 }
+
 void CPU::Opcode0x9E() {
   SBC(mmu->ReadMemory(HL.GetRegister()));
 }
+
 void CPU::Opcode0x9F() {
   SBC(A);
 }
+
 void CPU::Opcode0xA0() {
   AND(B);
 }
+
 void CPU::Opcode0xA1() {
   AND(C);
 }
+
 void CPU::Opcode0xA2() {
   AND(D);
 }
+
 void CPU::Opcode0xA3() {
   AND(E);
 }
+
 void CPU::Opcode0xA4() {
   AND(H);
 }
+
 void CPU::Opcode0xA5() {
   AND(L);
 }
+
 void CPU::Opcode0xA6() {
   AND(mmu->ReadMemory(HL.GetRegister()));
 }
+
 void CPU::Opcode0xA7() {
   AND(A);
 }
+
 void CPU::Opcode0xA8() {
   XOR(B);
 }
+
 void CPU::Opcode0xA9() {
   XOR(C);
 }
+
 void CPU::Opcode0xAA() {
   XOR(D);
 }
+
 void CPU::Opcode0xAB() {
   XOR(E);
 }
+
 void CPU::Opcode0xAC() {
   XOR(H);
 }
+
 void CPU::Opcode0xAD() {
   XOR(L);
 }
+
 void CPU::Opcode0xAE() {
   XOR(mmu->ReadMemory(HL.GetRegister()));
 }
+
 void CPU::Opcode0xAF() {
   XOR(A);
 }
+
 void CPU::Opcode0xB0() {
   OR(B);
 }
+
 void CPU::Opcode0xB1() {
   OR(C);
 }
+
 void CPU::Opcode0xB2() {
   OR(D);
 }
+
 void CPU::Opcode0xB3() {
   OR(E);
 }
+
 void CPU::Opcode0xB4() {
   OR(H);
 }
+
 void CPU::Opcode0xB5() {
   OR(L);
 }
+
 void CPU::Opcode0xB6() {
   OR(mmu->ReadMemory(HL.GetRegister()));
 }
+
 void CPU::Opcode0xB7() {
   OR(A);
 }
+
 void CPU::Opcode0xB8() {
   CP(B);
 }
+
 void CPU::Opcode0xB9() {
   CP(C);
 }
+
 void CPU::Opcode0xBA() {
   CP(D);
 }
+
 void CPU::Opcode0xBB() {
   CP(E);
 }
+
 void CPU::Opcode0xBC() {
   CP(H);
 }
+
 void CPU::Opcode0xBD() {
   CP(L);
 }
+
 void CPU::Opcode0xBE() {
   CP(mmu->ReadMemory(HL.GetRegister()));
 }
+
 void CPU::Opcode0xBF() {
   CP(A);
 }
+
 void CPU::Opcode0xC0() {
   if (!GetBit(F, FLAG_Z)) {
     POP_STACK16();
   }
 }
+
 void CPU::Opcode0xC1() {
   POP_STACK(BC);
 }
+
 void CPU::Opcode0xC2() {
   if (!GetBit(F, FLAG_Z)) {
     JP();
@@ -1460,9 +1771,11 @@ void CPU::Opcode0xC2() {
     PC++;
   }
 }
+
 void CPU::Opcode0xC3() {
   JP();
 }
+
 void CPU::Opcode0xC4() {
   if (!GetBit(F, FLAG_Z)) {
     CALL();
@@ -1471,24 +1784,30 @@ void CPU::Opcode0xC4() {
     PC++;
   }
 }
+
 void CPU::Opcode0xC5() {
   PUSH_STACK(BC);
 }
+
 void CPU::Opcode0xC6() {
   ADD(mmu->ReadMemory(PC));
   PC++;
 }
+
 void CPU::Opcode0xC7() {
   RST(0);
 }
+
 void CPU::Opcode0xC8() {
   if (GetBit(F, FLAG_Z)) {
     RET();
   }
 }
+
 void CPU::Opcode0xC9() {
   RET();
 }
+
 void CPU::Opcode0xCA() {
   if (GetBit(F, FLAG_Z)) {
     JP();
@@ -1497,7 +1816,9 @@ void CPU::Opcode0xCA() {
     PC++;
   }
 }
+
 void CPU::Opcode0xCB() { /* cb-prefix inst*/ }
+
 void CPU::Opcode0xCC() {
   if (GetBit(F, FLAG_Z)) {
     CALL();
@@ -1506,24 +1827,30 @@ void CPU::Opcode0xCC() {
     PC++;
   }
 }
+
 void CPU::Opcode0xCD() {
   CALL();
 }
+
 void CPU::Opcode0xCE() {
   ADC(mmu->ReadMemory(PC));
   PC++;
 }
+
 void CPU::Opcode0xCF() {
   RST(1);
 }
+
 void CPU::Opcode0xD0() {
   if (!GetBit(F, FLAG_C)) {
     RET();
   }
 }
+
 void CPU::Opcode0xD1() {
   POP_STACK(DE);
 }
+
 void CPU::Opcode0xD2() {
   if (!GetBit(F, FLAG_C)) {
     JP();
@@ -1532,7 +1859,9 @@ void CPU::Opcode0xD2() {
     PC++;
   }
 }
+
 void CPU::Opcode0xD3() {}
+
 void CPU::Opcode0xD4() {
   if (!GetBit(F, FLAG_C)) {
     CALL();
@@ -1541,16 +1870,20 @@ void CPU::Opcode0xD4() {
     PC++;
   }
 }
+
 void CPU::Opcode0xD5() {
   POP_STACK(DE);
 }
+
 void CPU::Opcode0xD6() {
   SUB(mmu->ReadMemory(PC));
   PC++;
 }
+
 void CPU::Opcode0xD7() {
   RST(2);
 }
+
 void CPU::Opcode0xD8() {
   if (GetBit(F, FLAG_C)) {
     RET();
@@ -1561,6 +1894,7 @@ void CPU::Opcode0xD9() {
   RET();
   IME = true;
 }
+
 void CPU::Opcode0xDA() {
   if (GetBit(F, FLAG_C)) {
     JP();
@@ -1569,7 +1903,9 @@ void CPU::Opcode0xDA() {
     PC++;
   }
 }
+
 void CPU::Opcode0xDB() {}
+
 void CPU::Opcode0xDC() {
   if (GetBit(F, FLAG_C)) {
     CALL();
@@ -1578,81 +1914,109 @@ void CPU::Opcode0xDC() {
     PC++;
   }
 }
+
 void CPU::Opcode0xDD() {}
+
 void CPU::Opcode0xDE() {
   SBC(mmu->ReadMemory(PC));
   PC++;
 }
+
 void CPU::Opcode0xDF() {
   RST(3);
 }
+
 
 void CPU::Opcode0xE0() {
   LD(static_cast <uint16_t> (0xFF00 + mmu->ReadMemory(PC)), A);
   PC++;
 }
+
 void CPU::Opcode0xE1() {
   POP_STACK(HL);
 }
+
 void CPU::Opcode0xE2() {
   LD(static_cast <uint16_t> (0xFF00 + C), A);
 }
+
 void CPU::Opcode0xE3() {}
+
 void CPU::Opcode0xE4() {}
+
 void CPU::Opcode0xE5() {
   PUSH_STACK(HL);
 }
+
 void CPU::Opcode0xE6() {
   AND(mmu->ReadMemory(PC));
   PC++;
 }
+
 void CPU::Opcode0xE7() {
   RST(4);
 }
+
 void CPU::Opcode0xE8() {
   ADD_SP();
 }
+
 void CPU::Opcode0xE9() {
   JP_HL();
 }
+
 void CPU::Opcode0xEA() {
   mmu->SetMemory(FormWord(mmu->ReadMemory(PC), mmu->ReadMemory(PC + 1)), A);
   PC += 2;
 }
+
 void CPU::Opcode0xEB() {}
+
 void CPU::Opcode0xEC() {}
+
 void CPU::Opcode0xED() {}
+
 void CPU::Opcode0xEE() {
   XOR(mmu->ReadMemory(PC));
   PC++;
 }
+
 void CPU::Opcode0xEF() {
   RST(7);
 }
+
 void CPU::Opcode0xF0() {
   LD(A, static_cast <uint16_t> (0xFF00 + mmu->ReadMemory(PC)));
   PC++;
 }
+
 void CPU::Opcode0xF1() {
   POP_STACK(AF);
 }
+
 void CPU::Opcode0xF2() {
   LD(A, static_cast <uint16_t> (0xFF00 + C));
 }
+
 void CPU::Opcode0xF3() {
   IME = false;
 }
+
 void CPU::Opcode0xF4() {}
+
 void CPU::Opcode0xF5() {
   PUSH_STACK(AF);
 }
+
 void CPU::Opcode0xF6() {
   OR(mmu->ReadMemory(PC));
   PC++;
 }
+
 void CPU::Opcode0xF7() {
   RST(6);
 }
+
 void CPU::Opcode0xF8() {
   int16_t data = SP + mmu->ReadMemory(PC);;
   ClearBit(F, FLAG_Z);
@@ -1662,18 +2026,24 @@ void CPU::Opcode0xF8() {
   HL.SetRegister(data);
   PC++;
 }
+
 void CPU::Opcode0xF9() {
   SP = HL.GetRegister();
 }
+
 void CPU::Opcode0xFA() {
   LD(A, FormWord(mmu->ReadMemory(PC), mmu->ReadMemory(PC + 1)));
   PC += 2;
 }
+
 void CPU::Opcode0xFB() {
   IME = true;
 }
+
 void CPU::Opcode0xFC() {}
+
 void CPU::Opcode0xFD() {}
+
 void CPU::Opcode0xFE() {
   CP(mmu->ReadMemory(PC));
   PC++;
@@ -1682,3 +2052,518 @@ void CPU::Opcode0xFE() {
 void CPU::Opcode0xFF() {
   RST(7);
 }
+
+/* --------------------------------------------------------------------*/
+/* -------------------------- EXTENDED OPCODES ------------------------*/
+/* --------------------------------------------------------------------*/
+
+void CPU::ExtendedOpcode0x00() {}
+
+void CPU::ExtendedOpcode0x01() {}
+
+void CPU::ExtendedOpcode0x02() {}
+
+void CPU::ExtendedOpcode0x03() {}
+
+void CPU::ExtendedOpcode0x04() {}
+
+void CPU::ExtendedOpcode0x05() {}
+
+void CPU::ExtendedOpcode0x06() {}
+
+void CPU::ExtendedOpcode0x07() {}
+
+void CPU::ExtendedOpcode0x08() {}
+
+void CPU::ExtendedOpcode0x09() {}
+
+void CPU::ExtendedOpcode0x0A() {}
+
+void CPU::ExtendedOpcode0x0B() {}
+
+void CPU::ExtendedOpcode0x0C() {}
+
+void CPU::ExtendedOpcode0x0D() {}
+
+void CPU::ExtendedOpcode0x0E() {}
+
+void CPU::ExtendedOpcode0x0F() {}
+
+void CPU::ExtendedOpcode0x10() {}
+
+void CPU::ExtendedOpcode0x11() {}
+
+void CPU::ExtendedOpcode0x12() {}
+
+void CPU::ExtendedOpcode0x13() {}
+
+void CPU::ExtendedOpcode0x14() {}
+
+void CPU::ExtendedOpcode0x15() {}
+
+void CPU::ExtendedOpcode0x16() {}
+
+void CPU::ExtendedOpcode0x17() {}
+
+void CPU::ExtendedOpcode0x18() {}
+
+void CPU::ExtendedOpcode0x19() {}
+
+void CPU::ExtendedOpcode0x1A() {}
+
+void CPU::ExtendedOpcode0x1B() {}
+
+void CPU::ExtendedOpcode0x1C() {}
+
+void CPU::ExtendedOpcode0x1D() {}
+
+void CPU::ExtendedOpcode0x1E() {}
+
+void CPU::ExtendedOpcode0x1F() {}
+
+void CPU::ExtendedOpcode0x20() {}
+
+void CPU::ExtendedOpcode0x21() {}
+
+void CPU::ExtendedOpcode0x22() {}
+
+void CPU::ExtendedOpcode0x23() {}
+
+void CPU::ExtendedOpcode0x24() {}
+
+void CPU::ExtendedOpcode0x25() {}
+
+void CPU::ExtendedOpcode0x26() {}
+
+void CPU::ExtendedOpcode0x27() {}
+
+void CPU::ExtendedOpcode0x28() {}
+
+void CPU::ExtendedOpcode0x29() {}
+
+void CPU::ExtendedOpcode0x2A() {}
+
+void CPU::ExtendedOpcode0x2B() {}
+
+void CPU::ExtendedOpcode0x2C() {}
+
+void CPU::ExtendedOpcode0x2D() {}
+
+void CPU::ExtendedOpcode0x2E() {}
+
+void CPU::ExtendedOpcode0x2F() {}
+
+void CPU::ExtendedOpcode0x30() {}
+
+void CPU::ExtendedOpcode0x31() {}
+
+void CPU::ExtendedOpcode0x32() {}
+
+void CPU::ExtendedOpcode0x33() {}
+
+void CPU::ExtendedOpcode0x34() {}
+
+void CPU::ExtendedOpcode0x35() {}
+
+void CPU::ExtendedOpcode0x36() {}
+
+void CPU::ExtendedOpcode0x37() {}
+
+void CPU::ExtendedOpcode0x38() {}
+
+void CPU::ExtendedOpcode0x39() {}
+
+void CPU::ExtendedOpcode0x3A() {}
+
+void CPU::ExtendedOpcode0x3B() {}
+
+void CPU::ExtendedOpcode0x3C() {}
+
+void CPU::ExtendedOpcode0x3D() {}
+
+void CPU::ExtendedOpcode0x3E() {}
+
+void CPU::ExtendedOpcode0x3F() {}
+
+void CPU::ExtendedOpcode0x40() {}
+
+void CPU::ExtendedOpcode0x41() {}
+
+void CPU::ExtendedOpcode0x42() {}
+
+void CPU::ExtendedOpcode0x43() {}
+
+void CPU::ExtendedOpcode0x44() {}
+
+void CPU::ExtendedOpcode0x45() {}
+
+void CPU::ExtendedOpcode0x46() {}
+
+void CPU::ExtendedOpcode0x47() {}
+
+void CPU::ExtendedOpcode0x48() {}
+
+void CPU::ExtendedOpcode0x49() {}
+
+void CPU::ExtendedOpcode0x4A() {}
+
+void CPU::ExtendedOpcode0x4B() {}
+
+void CPU::ExtendedOpcode0x4C() {}
+
+void CPU::ExtendedOpcode0x4D() {}
+
+void CPU::ExtendedOpcode0x4E() {}
+
+void CPU::ExtendedOpcode0x4F() {}
+
+void CPU::ExtendedOpcode0x50() {}
+
+void CPU::ExtendedOpcode0x51() {}
+
+void CPU::ExtendedOpcode0x52() {}
+
+void CPU::ExtendedOpcode0x53() {}
+
+void CPU::ExtendedOpcode0x54() {}
+
+void CPU::ExtendedOpcode0x55() {}
+
+void CPU::ExtendedOpcode0x56() {}
+
+void CPU::ExtendedOpcode0x57() {}
+
+void CPU::ExtendedOpcode0x58() {}
+
+void CPU::ExtendedOpcode0x59() {}
+
+void CPU::ExtendedOpcode0x5A() {}
+
+void CPU::ExtendedOpcode0x5B() {}
+
+void CPU::ExtendedOpcode0x5C() {}
+
+void CPU::ExtendedOpcode0x5D() {}
+
+void CPU::ExtendedOpcode0x5E() {}
+
+void CPU::ExtendedOpcode0x5F() {}
+
+void CPU::ExtendedOpcode0x60() {}
+
+void CPU::ExtendedOpcode0x61() {}
+
+void CPU::ExtendedOpcode0x62() {}
+
+void CPU::ExtendedOpcode0x63() {}
+
+void CPU::ExtendedOpcode0x64() {}
+
+void CPU::ExtendedOpcode0x65() {}
+
+void CPU::ExtendedOpcode0x66() {}
+
+void CPU::ExtendedOpcode0x67() {}
+
+void CPU::ExtendedOpcode0x68() {}
+
+void CPU::ExtendedOpcode0x69() {}
+
+void CPU::ExtendedOpcode0x6A() {}
+
+void CPU::ExtendedOpcode0x6B() {}
+
+void CPU::ExtendedOpcode0x6C() {}
+
+void CPU::ExtendedOpcode0x6D() {}
+
+void CPU::ExtendedOpcode0x6E() {}
+
+void CPU::ExtendedOpcode0x6F() {}
+
+void CPU::ExtendedOpcode0x70() {}
+
+void CPU::ExtendedOpcode0x71() {}
+
+void CPU::ExtendedOpcode0x72() {}
+
+void CPU::ExtendedOpcode0x73() {}
+
+void CPU::ExtendedOpcode0x74() {}
+
+void CPU::ExtendedOpcode0x75() {}
+
+void CPU::ExtendedOpcode0x76() {}
+
+void CPU::ExtendedOpcode0x77() {}
+
+void CPU::ExtendedOpcode0x78() {}
+
+void CPU::ExtendedOpcode0x79() {}
+
+void CPU::ExtendedOpcode0x7A() {}
+
+void CPU::ExtendedOpcode0x7B() {}
+
+void CPU::ExtendedOpcode0x7C() {}
+
+void CPU::ExtendedOpcode0x7D() {}
+
+void CPU::ExtendedOpcode0x7E() {}
+
+void CPU::ExtendedOpcode0x7F() {}
+
+void CPU::ExtendedOpcode0x80() {}
+
+void CPU::ExtendedOpcode0x81() {}
+
+void CPU::ExtendedOpcode0x82() {}
+
+void CPU::ExtendedOpcode0x83() {}
+
+void CPU::ExtendedOpcode0x84() {}
+
+void CPU::ExtendedOpcode0x85() {}
+
+void CPU::ExtendedOpcode0x86() {}
+
+void CPU::ExtendedOpcode0x87() {}
+
+void CPU::ExtendedOpcode0x88() {}
+
+void CPU::ExtendedOpcode0x89() {}
+
+void CPU::ExtendedOpcode0x8A() {}
+
+void CPU::ExtendedOpcode0x8B() {}
+
+void CPU::ExtendedOpcode0x8C() {}
+
+void CPU::ExtendedOpcode0x8D() {}
+
+void CPU::ExtendedOpcode0x8E() {}
+
+void CPU::ExtendedOpcode0x8F() {}
+
+void CPU::ExtendedOpcode0x90() {}
+void CPU::ExtendedOpcode0x91() {}
+
+void CPU::ExtendedOpcode0x92() {}
+
+void CPU::ExtendedOpcode0x93() {}
+
+void CPU::ExtendedOpcode0x94() {}
+
+void CPU::ExtendedOpcode0x95() {}
+
+void CPU::ExtendedOpcode0x96() {}
+
+void CPU::ExtendedOpcode0x97() {}
+
+void CPU::ExtendedOpcode0x98() {}
+
+void CPU::ExtendedOpcode0x99() {}
+
+void CPU::ExtendedOpcode0x9A() {}
+
+void CPU::ExtendedOpcode0x9B() {}
+
+void CPU::ExtendedOpcode0x9C() {}
+
+void CPU::ExtendedOpcode0x9D() {}
+
+void CPU::ExtendedOpcode0x9E() {}
+
+void CPU::ExtendedOpcode0x9F() {}
+
+void CPU::ExtendedOpcode0xA0() {}
+
+void CPU::ExtendedOpcode0xA1() {}
+
+void CPU::ExtendedOpcode0xA2() {}
+
+void CPU::ExtendedOpcode0xA3() {}
+
+void CPU::ExtendedOpcode0xA4() {}
+
+void CPU::ExtendedOpcode0xA5() {}
+
+void CPU::ExtendedOpcode0xA6() {}
+
+void CPU::ExtendedOpcode0xA7() {}
+
+void CPU::ExtendedOpcode0xA8() {}
+
+void CPU::ExtendedOpcode0xA9() {}
+
+void CPU::ExtendedOpcode0xAA() {}
+
+void CPU::ExtendedOpcode0xAB() {}
+
+void CPU::ExtendedOpcode0xAC() {}
+
+void CPU::ExtendedOpcode0xAD() {}
+
+void CPU::ExtendedOpcode0xAE() {}
+
+void CPU::ExtendedOpcode0xAF() {}
+
+void CPU::ExtendedOpcode0xB0() {}
+
+void CPU::ExtendedOpcode0xB1() {}
+
+void CPU::ExtendedOpcode0xB2() {}
+
+void CPU::ExtendedOpcode0xB3() {}
+
+void CPU::ExtendedOpcode0xB4() {}
+
+void CPU::ExtendedOpcode0xB5() {}
+
+void CPU::ExtendedOpcode0xB6() {}
+
+void CPU::ExtendedOpcode0xB7() {}
+
+void CPU::ExtendedOpcode0xB8() {}
+
+void CPU::ExtendedOpcode0xB9() {}
+
+void CPU::ExtendedOpcode0xBA() {}
+
+void CPU::ExtendedOpcode0xBB() {}
+
+void CPU::ExtendedOpcode0xBC() {}
+
+void CPU::ExtendedOpcode0xBD() {}
+
+void CPU::ExtendedOpcode0xBE() {}
+
+void CPU::ExtendedOpcode0xBF() {}
+
+void CPU::ExtendedOpcode0xC0() {}
+
+void CPU::ExtendedOpcode0xC1() {}
+
+void CPU::ExtendedOpcode0xC2() {}
+
+void CPU::ExtendedOpcode0xC3() {}
+
+void CPU::ExtendedOpcode0xC4() {}
+
+void CPU::ExtendedOpcode0xC5() {}
+
+void CPU::ExtendedOpcode0xC6() {}
+
+void CPU::ExtendedOpcode0xC7() {}
+
+void CPU::ExtendedOpcode0xC8() {}
+
+void CPU::ExtendedOpcode0xC9() {}
+
+void CPU::ExtendedOpcode0xCA() {}
+
+void CPU::ExtendedOpcode0xCB() {}
+
+void CPU::ExtendedOpcode0xCC() {}
+
+void CPU::ExtendedOpcode0xCD() {}
+
+void CPU::ExtendedOpcode0xCE() {}
+
+void CPU::ExtendedOpcode0xCF() {}
+
+void CPU::ExtendedOpcode0xD0() {}
+
+void CPU::ExtendedOpcode0xD1() {}
+
+void CPU::ExtendedOpcode0xD2() {}
+
+void CPU::ExtendedOpcode0xD3() {}
+
+void CPU::ExtendedOpcode0xD4() {}
+
+void CPU::ExtendedOpcode0xD5() {}
+
+void CPU::ExtendedOpcode0xD6() {}
+
+void CPU::ExtendedOpcode0xD7() {}
+
+void CPU::ExtendedOpcode0xD8() {}
+
+void CPU::ExtendedOpcode0xD9() {}
+
+void CPU::ExtendedOpcode0xDA() {}
+
+void CPU::ExtendedOpcode0xDB() {}
+
+void CPU::ExtendedOpcode0xDC() {}
+
+void CPU::ExtendedOpcode0xDD() {}
+
+void CPU::ExtendedOpcode0xDE() {}
+
+void CPU::ExtendedOpcode0xDF() {}
+
+void CPU::ExtendedOpcode0xE0() {}
+
+void CPU::ExtendedOpcode0xE1() {}
+
+void CPU::ExtendedOpcode0xE2() {}
+
+void CPU::ExtendedOpcode0xE3() {}
+
+void CPU::ExtendedOpcode0xE4() {}
+
+void CPU::ExtendedOpcode0xE5() {}
+
+void CPU::ExtendedOpcode0xE6() {}
+
+void CPU::ExtendedOpcode0xE7() {}
+
+void CPU::ExtendedOpcode0xE8() {}
+
+void CPU::ExtendedOpcode0xE9() {}
+
+void CPU::ExtendedOpcode0xEA() {}
+
+void CPU::ExtendedOpcode0xEB() {}
+
+void CPU::ExtendedOpcode0xEC() {}
+
+void CPU::ExtendedOpcode0xED() {}
+
+void CPU::ExtendedOpcode0xEE() {}
+
+void CPU::ExtendedOpcode0xEF() {}
+
+void CPU::ExtendedOpcode0xF0() {}
+
+void CPU::ExtendedOpcode0xF1() {}
+
+void CPU::ExtendedOpcode0xF2() {}
+
+void CPU::ExtendedOpcode0xF3() {}
+
+void CPU::ExtendedOpcode0xF4() {}
+
+void CPU::ExtendedOpcode0xF5() {}
+
+void CPU::ExtendedOpcode0xF6() {}
+
+void CPU::ExtendedOpcode0xF7() {}
+
+void CPU::ExtendedOpcode0xF8() {}
+
+void CPU::ExtendedOpcode0xF9() {}
+
+void CPU::ExtendedOpcode0xFA() {}
+
+void CPU::ExtendedOpcode0xFB() {}
+
+void CPU::ExtendedOpcode0xFC() {}
+
+void CPU::ExtendedOpcode0xFD() {}
+
+void CPU::ExtendedOpcode0xFE() {}
+
+void CPU::ExtendedOpcode0xFF() {}
