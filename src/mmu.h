@@ -10,6 +10,6 @@ class MMU {
         void LoadROM(MMU* mmu, std::string filename);
         void DumpMemory(MMU* mmu);
         
-        uint8_t ReadMemory(uint16_t Address);
-        void SetMemory(uint16_t Address, uint8_t Value);
+        uint8_t ReadMemory(uint16_t address);
+        void SetMemory(uint16_t address, uint8_t value);
 };

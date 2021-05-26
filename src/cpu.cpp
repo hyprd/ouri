@@ -33,6 +33,7 @@ CPU::CPU(MMU* _mmu) {
 
 void CPU::Initialise() {
     std::cout << "\n[INFO] Initialising CPU..." << std::endl;
+    cycles = 0;
     PC = 0x0100;
     AF.SetRegister(0x01B0);
     BC.SetRegister(0x0013);
@@ -79,11 +80,14 @@ void CPU::Cycle() {
 
 void CPU::Execute(uint8_t instruction) {
     DebugInstruction(instruction);
-    std::cout << "PC: " << PC << "\t";
+    std::cout << "\nPC: " << PC << "\t";
+    std::cout << "\nCycles: " << std::dec << cycles << std::endl;
     if(!extended) {
         (this->*Opcodes[instruction])();
+        cycles += opcodeTimings[instruction];
     } else {
         (this->*ExtendedOpcodes[instruction])();
+        cycles += opcodeExtendedTimings[instruction];
         extended = false;
     }
     if(!halted) PC++;

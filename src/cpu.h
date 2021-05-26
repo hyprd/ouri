@@ -20,6 +20,7 @@ class CPU {
         uint8_t A, B, C, D, E, F, H, L;
         uint16_t SP;
         uint16_t PC;
+        uint16_t cycles;
         
         uint16_t RSTVectors[8] = { 0x0000, 0x0008, 0x0010, 0x0018, 0x0020, 0x0028, 0x0030, 0x0038 };
         uint8_t InterruptVectors[5] = {0x0040, 0x0048, 0x0050, 0x0058, 0x0060};

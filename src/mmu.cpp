@@ -1,4 +1,5 @@
 #include "mmu.h"
+#include "helpers.h"
 
 MMU::MMU(){}
 
@@ -20,10 +21,10 @@ void MMU::DumpMemory(MMU* mmu) {
     }
 }
 
-uint8_t MMU::ReadMemory(uint16_t Address) {
-    return Memory[Address];
+uint8_t MMU::ReadMemory(uint16_t address) {
+    return Memory[address];
 }
 
-void MMU::SetMemory(uint16_t Address, uint8_t Value) {
-     Memory[Address] = Value;
+void MMU::SetMemory(uint16_t address, uint8_t value) {
+     Memory[address] = value;
 } 

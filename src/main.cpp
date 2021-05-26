@@ -14,12 +14,12 @@ int main(int argc, char *argv[]) {
     //     std::cout << "[ERROR] Couldn't initlialise SDL!" << std::endl;
     //     return 1;
     // } else {
-        MMU* mmu = new MMU;
-        mmu->LoadROM(mmu, filename);
-        CPU* cpu = new CPU(mmu);
-        for(;;) {
-            cpu->Cycle();
-        }
+    MMU* mmu = new MMU;
+    mmu->LoadROM(mmu, filename);
+    CPU* cpu = new CPU(mmu);
+    for(;;) {
+        cpu->Cycle();
+    }
    // }
     return 0;
 }
