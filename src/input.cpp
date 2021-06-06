@@ -33,6 +33,7 @@ void Input::Released(Keys k) {
 }
 
 void Input::WriteState() {
+    //std::cout << std::uppercase << std::hex << currentContext.to_ulong() << std::endl;
     joypad = static_cast<uint8_t>(currentContext.to_ulong());
     _mmu->SetMemory(0xFF00, joypad);
 }

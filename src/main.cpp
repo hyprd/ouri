@@ -3,6 +3,7 @@
 #include "mmu.h"
 #include "cpu.h"
 #include "input.h"
+#include "ppu.h"
 
 int main(int argc, char *argv[]) {
     if(strlen(argv[1]) < 1) {
@@ -10,21 +11,18 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     std::string filename = argv[1];
-    SDL_Event event;
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    
     MMU* mmu = new MMU;
     mmu->LoadROM(mmu, filename);
     CPU* cpu = new CPU(mmu);
     Input* io = new Input(mmu);
+    PPU* ppu = new PPU(mmu);
+    SDL_Event event;
     
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         std::cout << "[ERROR] Couldn't initlialise SDL!" << std::endl;
         return 1;
     } else {
-        window = SDL_CreateWindow("ouri", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
-        renderer = SDL_CreateRenderer(window, -1, 0); 
-        
         for(;;) {
             //cpu->Cycle();
             while(SDL_PollEvent(&event)) {
@@ -83,16 +81,14 @@ int main(int argc, char *argv[]) {
                             break;
                     }
                 } else if(event.type == SDL_QUIT) {
+                    delete(io);
+                    delete(mmu);
+                    delete(cpu);
+                    delete(ppu);
                     return 0;
                 }
             }
         }
     }
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-    delete(io);
-    delete(mmu);
-    delete(cpu);
     return 0;
 }

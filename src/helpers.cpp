@@ -2,8 +2,11 @@
 #include "cpu.h"
 
 uint16_t FormWord(uint8_t high, uint8_t low) {
-    uint16_t word = high << 8 | low & 0x00FF; 
-    return word;
+    return static_cast<uint16_t>(high << 8 | low & 0x00FF);
+}
+
+uint8_t FormByte(uint8_t high, uint8_t low) {
+    return static_cast<uint8_t>(high << 4 | low);
 }
 
 void CPU::DebugRegisters() {
