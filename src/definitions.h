@@ -7,6 +7,8 @@
 #include <string.h>
 
 const int GB_MEMORY_MAX = 8388608;
+const int GB_WIDTH = 160;
+const int GB_HEIGHT = 144;
 
 const uint8_t opcodeTimings [256] = {
     1, 3, 2, 2, 1, 1, 2, 1, 5, 2, 2, 2, 1, 1, 2, 1,
