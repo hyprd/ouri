@@ -83,8 +83,35 @@ inline void PPU::LoadPalettes() {
 }
 
 uint8_t PPU::GetColour(int8_t colourValue, uint16_t palette) {
-    int8_t data = _mmu->ReadMemory(palette);
-    return ((data >> (colourValue * 2 + 1)) << 1 | (data >> (colourValue * 2))) & 0x01;
+    // int8_t data = _mmu->ReadMemory(palette);
+    // return ((data >> (colourValue * 2 + 1)) << 1 | (data >> (colourValue * 2))) & 0x01;
+    uint8_t pal = _mmu->ReadMemory(palette);
+    int upper = 0, lower = 0;
+    // Bit 7 - 6 - Color for index 3
+    // Bit 5 - 4 - Color for index 2
+    // Bit 3 - 2 - Color for index 1
+    // Bit 1 - 0 - Color for index 0
+    switch(colourValue) {
+        case 0: 
+            upper = 1; 
+            lower = 0;
+            break;
+        case 1: 
+            upper = 3; 
+            lower = 2;
+            break;
+        case 2: 
+            upper = 5; 
+            lower = 4;
+            break;
+        case 3: 
+            upper = 7; 
+            lower = 6;
+            break;
+    }
+    // return colour from the palette
+    // order -> [upper colour, lower colour]
+    return ((pal >> upper) << 0x01 | (pal >> lower));
 }
 
 void PPU::RenderBackground() {
