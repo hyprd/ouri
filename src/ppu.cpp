@@ -104,16 +104,13 @@ void PPU::RenderBackground() {
            memoryRegion += _mmu->ReadMemory(tilemap + currentTileRow + currentTileCol) * tileSize;
         }
         else {
-            memoryRegion += static_cast<int8_t>((_mmu->ReadMemory(tilemap + currentTileRow + currentTileCol) + offset) * tileSize) ;
+            memoryRegion += static_cast<int8_t>((_mmu->ReadMemory(tilemap + currentTileRow + currentTileCol) + offset) * tileSize);
         }     
         uint16_t addr = (y % 8) * 2;
         uint8_t upper = _mmu->ReadMemory(memoryRegion + addr);
         uint8_t lower = _mmu->ReadMemory(memoryRegion + addr + 1);
-
-        int colourBit = ~((x % 8) - 7);
-        int colourValue = (lower >> colourBit) & 0x01;
-        colourValue <<= 0x01;
-        colourValue |= (upper >> colourBit) & 0x01;
+        int8_t colourBit = ~((x % 8) - 7);
+        int8_t colourValue = (lower >> colourBit) << 0x01 | (upper >> colourBit) & 0x01;
         uint8_t colour = GetColour(colourValue, 0xFF47);
         pixels[x + (currentScanline * GB_WIDTH)] = colour;  
     }
