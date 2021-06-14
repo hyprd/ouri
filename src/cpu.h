@@ -42,6 +42,7 @@ class CPU {
         Opcode ExtendedOpcodes[0x100] = {0};
         void PopulateOpcodes();
         void PopulateExtendedOpcodes();
+        void OAMTransfer();
     
     private:
         bool IME = false;

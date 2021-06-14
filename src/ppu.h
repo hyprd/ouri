@@ -10,6 +10,8 @@ class PPU {
         void Update();
         
     private: 
+        const unsigned int signedOffset = 128;
+        
         SDL_Window* window;
         SDL_Renderer* renderer;
         SDL_Texture* texture;
@@ -40,5 +42,6 @@ class PPU {
         void UpdateRenderer();
         void RenderBackground();
         void IncrementScanline();
+        void RenderSprites();
         uint8_t GetColour(int8_t colourValue, uint16_t palette);
 };

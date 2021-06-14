@@ -24,8 +24,10 @@ int main(int argc, char *argv[]) {
         return 1;
     } else {
         for(;;) {
+            cpu->OAMTransfer();
             //cpu->Cycle();
             ppu->Update();
+            
             while(SDL_PollEvent(&event)) {
                 if(event.type == SDL_KEYDOWN) {
                     switch(event.key.keysym.sym) {

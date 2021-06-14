@@ -32,7 +32,8 @@ void PPU::Update() {
     UpdateLCDC();
     LoadPalettes();
     UpdateRenderer();
-    RenderBackground();
+    // RenderBackground();
+    RenderSprites();
     IncrementScanline();
 }
 
@@ -46,13 +47,43 @@ inline void PPU::UpdateRenderer() {
     SDL_RenderPresent(renderer);
 }
 
+uint8_t PPU::GetColour(int8_t colourValue, uint16_t palette) {
+   uint8_t pal = _mmu->ReadMemory(palette);
+    int upper = 0, lower = 0;
+    // Bit 7 - 6 - Color for index 3
+    // Bit 5 - 4 - Color for index 2
+    // Bit 3 - 2 - Color for index 1
+    // Bit 1 - 0 - Color for index 0
+    switch(colourValue) {
+        case 0: 
+            upper = 1; 
+            lower = 0;
+            break;
+        case 1: 
+            upper = 3; 
+            lower = 2;
+            break;
+        case 2: 
+            upper = 5; 
+            lower = 4;
+            break;
+        case 3: 
+            upper = 7; 
+            lower = 6;
+            break;
+    }
+    // return colour from the palette
+    // order -> [upper colour, lower colour]
+    return ((pal >> upper) << 0x01 | (pal >> lower));
+}
+
 inline void PPU::UpdateLCDC() {
     // LCDC functions
     LCDControl = _mmu->ReadMemory(0xFF40);
     enabledWindowBackground = LCDControl.test(0) ? true : false;
     enabledSprites = LCDControl.test(1) ? true : false;
     LCDControl.test(2) ? spriteHeight = 16 : spriteHeight = 8;
-    tilemapAreaBackground = LCDControl.test(3) ? 0x9800 : 0x9C00;
+    tilemapAreaBackground = LCDControl.test(3) ? 0x9C00 : 0x9800;
     tileAddressingMode = LCDControl.test(4) ? true : false;
     enabledWindow = LCDControl.test(5) ? true : false;
     tilemapAreaWindow = LCDControl.test(6) ? 0x9800: 0x9C00;
@@ -82,63 +113,66 @@ inline void PPU::LoadPalettes() {
     }
 }
 
-uint8_t PPU::GetColour(int8_t colourValue, uint16_t palette) {
-    // int8_t data = _mmu->ReadMemory(palette);
-    // return ((data >> (colourValue * 2 + 1)) << 1 | (data >> (colourValue * 2))) & 0x01;
-    uint8_t pal = _mmu->ReadMemory(palette);
-    int upper = 0, lower = 0;
-    // Bit 7 - 6 - Color for index 3
-    // Bit 5 - 4 - Color for index 2
-    // Bit 3 - 2 - Color for index 1
-    // Bit 1 - 0 - Color for index 0
-    switch(colourValue) {
-        case 0: 
-            upper = 1; 
-            lower = 0;
-            break;
-        case 1: 
-            upper = 3; 
-            lower = 2;
-            break;
-        case 2: 
-            upper = 5; 
-            lower = 4;
-            break;
-        case 3: 
-            upper = 7; 
-            lower = 6;
-            break;
+void PPU::RenderBackground() {
+    currentScanline = _mmu->ReadMemory(0xFF44);
+    if(currentScanline >= 144) return; 
+    uint16_t tileData = tileAddressingMode ? 0x8000 : 0x8800;
+    uint8_t SCY = _mmu->ReadMemory(0xFF42);
+    uint8_t SCX = _mmu->ReadMemory(0xFF43);
+    uint8_t y = SCY + currentScanline;
+    uint16_t row = static_cast<uint8_t>(y * 32);
+    for(int pixel = 0; pixel < GB_WIDTH; pixel++) {
+        uint8_t x = SCX + pixel;
+        uint16_t col = x / 8;
+        uint16_t address = tilemapAreaBackground + row + col;
+        int16_t tileNumber;
+        uint16_t tileAddress;
+        if(tileAddressingMode) {
+            tileNumber = static_cast<int8_t>(_mmu->ReadMemory(address));
+            tileAddress = tileData + ((tileNumber + signedOffset) * tileSize);
+        } else {
+            tileNumber = _mmu->ReadMemory(_mmu->ReadMemory(address));
+            tileAddress = tileData + (tileNumber * tileSize);
+        }
+        uint16_t addr = ((y % 8) * 2) + tileAddress;
+        uint8_t upper = _mmu->ReadMemory(addr);
+        uint8_t lower = _mmu->ReadMemory(addr + 1);
+
+        uint8_t colourBit = ~((x % 8) - 7);
+        uint8_t colourValue = (lower >> colourBit) << 0x01 | (upper >> colourBit) & 0x01;
+        std::cout << "Colour value: " << std::bitset<8>(+colourValue) << std::endl;
+        uint8_t colour = backgroundPalette[colourValue];
+        // std::cout << +colour << std::endl;
+        //std::cout << std::hex << +colour << std::endl;
+        pixels[x + (currentScanline * GB_WIDTH)] = colour;   
     }
-    // return colour from the palette
-    // order -> [upper colour, lower colour]
-    return ((pal >> upper) << 0x01 | (pal >> lower));
 }
 
-void PPU::RenderBackground() {
-    const unsigned int offset = 128;
+void PPU::RenderSprites() {
+    uint16_t tilemap = 0x8000; // always 0x8000 for sprite rendering
     currentScanline = _mmu->ReadMemory(0xFF44);
-    uint8_t SCX = _mmu->ReadMemory(0xFF42);
-    uint8_t SCY = _mmu->ReadMemory(0xFF42);
-    // resolve which memory region to use based on addressing mode
-    uint8_t tilemap = tileAddressingMode ? 0x9C00 : 0x9800;
-    uint8_t memoryRegion = tileAddressingMode ? 0x8000 : 0x8800;
-    for(int pixel = 0; pixel < GB_WIDTH; pixel++) {
-        uint8_t x = pixel + SCX;
-        uint8_t y = currentScanline + SCY;
-        const uint8_t currentTileRow = (y / 8) * 32;
-        const uint8_t currentTileCol = x / 8;
-        if(!tileAddressingMode) {
-           memoryRegion += _mmu->ReadMemory(tilemap + currentTileRow + currentTileCol) * tileSize;
+    for(int oam = 0xFE00; oam < 0xFE9F; oam += 4) {
+        uint8_t SY = _mmu->ReadMemory(oam);
+        uint8_t SX = _mmu->ReadMemory(oam + 1);
+        uint8_t index = _mmu->ReadMemory(oam + 2);
+        std::bitset<8> attributes = _mmu->ReadMemory(oam + 3);
+        uint16_t palette = attributes.test(4) ? 0xFF49 : 0xFF48;
+        bool flipX = attributes.test(5);
+        bool flipY = attributes.test(6);
+        if(currentScanline < (SY + spriteHeight) && currentScanline >= SY) {
+            uint16_t renderLine = flipY ? ~((currentScanline - SY) - spriteHeight) * 2 : (currentScanline - SY) * 2;
+            uint8_t upper = _mmu->ReadMemory(tilemap + (index * tileSize) + renderLine);
+            uint8_t lower= _mmu->ReadMemory(tilemap + (index * tileSize) + renderLine + 1);
+            for(int tilepixel = 7; tilepixel >= 0; tilepixel--) {
+                uint8_t pixel = ~(tilepixel) + 7 + SX;
+                if(pixel < GB_WIDTH && currentScanline < 144) { // not in vblank
+                    int pos = flipX ? ~(tilepixel - 7) : tilepixel;
+                    uint8_t colourValue = (lower >> pos) << 0x01 | (upper >> pos) & 0x01;
+                    uint8_t colour = GetColour(colourValue, palette);
+                    //std::cout << colour << std::endl;
+                    pixels[pixel + (currentScanline * GB_WIDTH)] = colour;   
+                }
+            }
         }
-        else {
-            memoryRegion += static_cast<int8_t>((_mmu->ReadMemory(tilemap + currentTileRow + currentTileCol) + offset) * tileSize);
-        }     
-        uint16_t addr = (y % 8) * 2;
-        uint8_t upper = _mmu->ReadMemory(memoryRegion + addr);
-        uint8_t lower = _mmu->ReadMemory(memoryRegion + addr + 1);
-        int8_t colourBit = ~((x % 8) - 7);
-        int8_t colourValue = (lower >> colourBit) << 0x01 | (upper >> colourBit) & 0x01;
-        uint8_t colour = GetColour(colourValue, 0xFF47);
-        pixels[x + (currentScanline * GB_WIDTH)] = colour;  
     }
 }

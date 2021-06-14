@@ -71,6 +71,7 @@ void CPU::Initialise() {
     mmu->SetMemory(0xFF4B, 0x00);
     mmu->SetMemory(0xFFFF, 0x00);
     SP = 0xFFFE;
+    
     std::cout << "[INFO] Done." << std::endl;
 }
 
@@ -92,4 +93,10 @@ void CPU::Execute(uint8_t instruction) {
     }
     if(!halted) PC++;
     HandleInterrupts();
+}
+
+void CPU::OAMTransfer() {
+    for(int byte = 0; byte < 0xA0; byte++) {
+        mmu->SetMemory(0xFE00 + byte, mmu->ReadMemory(byte + (A << 8)));
+    }
 }
